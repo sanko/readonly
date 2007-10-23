@@ -1,0 +1,53 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+PACKAGE=$(shell dh_listpackages)
+
+ifndef PERL
+PERL = /usr/bin/perl
+endif
+
+TMP     =$(CURDIR)/debian/$(PACKAGE)
+
+build: build-stamp
+
+build-stamp: 
+	dh_testdir
+	$(PERL) Makefile.PL INSTALLDIRS=vendor
+	$(MAKE)
+	$(MAKE) test
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	[ ! -f Makefile ] || $(MAKE) realclean
+	dh_clean 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	$(MAKE) install DESTDIR=$(TMP) PREFIX=/usr
+	rmdir --ignore-fail-on-non-empty --parents $(TMP)/usr/lib/perl5
+	rm -f $(TMP)/usr/share/perl5/benchmark.pl
+binary-arch:
+
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs Changes
+	dh_installdocs README
+	dh_compress
+	dh_installexamples benchmark.pl
+	dh_fixperms
+	dh_perl
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure

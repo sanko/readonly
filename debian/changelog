@@ -1,0 +1,6 @@
+libreadonly-perl (1.03-1) unstable; urgency=low
+
+  * Initial release (Closes: #447685)
+
+ -- Rene Mayorga <rmayorga@debian.org.sv>  Mon, 22 Oct 2007 20:42:47 -0600
+
