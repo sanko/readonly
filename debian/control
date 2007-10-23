@@ -7,6 +7,8 @@ Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: perl
 Standards-Version: 3.7.2
 Homepage: http://search.cpan.org/dist/Readonly/
+Vcs-Svn: svn://svn.debian.org/pkg-perl/trunk/libreadonly-perl/
+Vcs-Browser: http://svn.debian.org/wsvn/pkg-perl/trunk/libreadonly-perl/
 
 Package: libreadonly-perl
 Architecture: all
