@@ -30,7 +30,7 @@ install: build
 	dh_testroot
 	dh_clean -k 
 	$(MAKE) install DESTDIR=$(TMP) PREFIX=/usr
-	rmdir --ignore-fail-on-non-empty --parents $(TMP)/usr/lib/perl5
+	[ ! -d $(TMP)/usr/lib/perl5 ] || rmdir --ignore-fail-on-non-empty --parents --verbose $(TMP)/usr/lib/perl5
 	rm -f $(TMP)/usr/share/perl5/benchmark.pl
 binary-arch:
 
