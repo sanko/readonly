@@ -10,8 +10,7 @@ endif
 TMP     =$(CURDIR)/debian/$(PACKAGE)
 
 build: build-stamp
-
-build-stamp: 
+build-stamp:
 	dh_testdir
 	$(PERL) Makefile.PL INSTALLDIRS=vendor
 	$(MAKE)
@@ -22,16 +21,19 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
+	dh_clean build-stamp install-stamp
 	[ ! -f Makefile ] || $(MAKE) realclean
-	dh_clean 
 
-install: build
+install: install-stamp
+install-stamp: build-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k 
 	$(MAKE) install DESTDIR=$(TMP) PREFIX=/usr
 	[ ! -d $(TMP)/usr/lib/perl5 ] || rmdir --ignore-fail-on-non-empty --parents --verbose $(TMP)/usr/lib/perl5
 	rm -f $(TMP)/usr/share/perl5/benchmark.pl
+	touch $@
+
 binary-arch:
 
 binary-indep: build install
