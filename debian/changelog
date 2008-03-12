@@ -1,6 +1,7 @@
 libreadonly-perl (1.03-2) UNRELEASED; urgency=low
 
   * debian/rules: delete /usr/lib/perl5 only if it exists (closes: #467993).
+  * debian/watch: use dist-based URL.
 
  -- gregor herrmann <gregor+debian@comodo.priv.at>  Wed, 09 Jan 2008 21:18:42 +0100
 
