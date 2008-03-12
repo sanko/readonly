@@ -1,7 +1,7 @@
-libreadonly-perl (1.03-2) UNRELEASED; urgency=low
+libreadonly-perl (1.03-2) unstable; urgency=low
 
-  * debian/rules: delete /usr/lib/perl5 only if it exists (closes: #467993).
   * debian/rules:
+    - delete /usr/lib/perl5 only if it exists (closes: #467993)
     - move dh_clean before make realclean and use it for removing stamp
       files
     - create install-stamp target
@@ -9,7 +9,7 @@ libreadonly-perl (1.03-2) UNRELEASED; urgency=low
   * Set Standards-Version to 3.7.3 (no changes).
   * Add /me to Uploaders.
 
- -- gregor herrmann <gregor+debian@comodo.priv.at>  Wed, 12 Mar 2008 21:55:30 +0100
+ -- gregor herrmann <gregor+debian@comodo.priv.at>  Wed, 12 Mar 2008 21:58:04 +0100
 
 libreadonly-perl (1.03-1) unstable; urgency=low
 
