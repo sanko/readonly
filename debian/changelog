@@ -1,9 +1,13 @@
 libreadonly-perl (1.03-3) UNRELEASED; urgency=low
 
+  [ gregor herrmann ]
   * debian/control: Changed: Switched Vcs-Browser field to ViewSVN
     (source stanza).
 
- -- gregor herrmann <gregoa@debian.org>  Sun, 16 Nov 2008 20:46:34 +0100
+  [ Rene Mayorga ]
+  * debian/control: update my email address.
+
+ -- Rene Mayorga <rmayorga@debian.org>  Tue, 20 Jan 2009 01:28:42 -0600
 
 libreadonly-perl (1.03-2) unstable; urgency=low
 
