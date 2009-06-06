@@ -1,3 +1,3 @@
 version=3
 
-http://search.cpan.org/dist/Readonly/   .*/Readonly-v?(\d[\d_.]+)\.(?:tar(?:\.gz|\.bz2)?|tgz|zip)
+http://search.cpan.org/dist/Readonly/   .*/Readonly-v?(\d[\d.]+)\.(?:tar(?:\.gz|\.bz2)?|tgz|zip)
