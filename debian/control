@@ -3,7 +3,7 @@ Section: perl
 Priority: optional
 Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Uploaders: Rene Mayorga <rmayorga@debian.org>,
- gregor herrmann <gregor+debian@comodo.priv.at>
+ gregor herrmann <gregoa@debian.org>
 Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: perl
 Standards-Version: 3.7.3

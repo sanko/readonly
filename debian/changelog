@@ -10,6 +10,9 @@ libreadonly-perl (1.03-3) UNRELEASED; urgency=low
   [ Nathan Handler ]
   * debian/watch: Update to ignore development releases.
 
+  [ gregor herrmann ]
+  * Change my email address.
+
  -- Rene Mayorga <rmayorga@debian.org>  Tue, 20 Jan 2009 01:28:42 -0600
 
 libreadonly-perl (1.03-2) unstable; urgency=low
