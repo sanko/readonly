@@ -5,13 +5,13 @@ libreadonly-perl (1.03-3) unstable; urgency=low
     (source stanza).
 
   [ Rene Mayorga ]
-  * debian/control: update my email address.
+  * Email change: Rene Mayorga -> rmayorga@debian.org
 
   [ Nathan Handler ]
   * debian/watch: Update to ignore development releases.
 
   [ gregor herrmann ]
-  * Change my email address.
+  * Email change: gregor herrmann -> gregoa@debian.org
 
   [ Fabrizio Regalli ]
   * Bump to 3.9.2 Standard-Version.
