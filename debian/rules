@@ -3,7 +3,6 @@
 %:
 	dh $@
 
-PACKAGE = $(shell dh_listpackages)
 TMP     = $(CURDIR)/debian/$(PACKAGE)
 
 override_dh_auto_install:
