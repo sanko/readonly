@@ -1,4 +1,4 @@
-libreadonly-perl (1.03-3) UNRELEASED; urgency=low
+libreadonly-perl (1.03-3) unstable; urgency=low
 
   [ gregor herrmann ]
   * debian/control: Changed: Switched Vcs-Browser field to ViewSVN
