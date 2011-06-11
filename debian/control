@@ -1,13 +1,13 @@
 Source: libreadonly-perl
 Section: perl
 Priority: optional
-Build-Depends: debhelper (>= 7)
+Build-Depends: debhelper (>= 8)
 Build-Depends-Indep: perl
 Maintainer: Debian Perl Group <pkg-perl-maintainers@lists.alioth.debian.org>
 Uploaders: Rene Mayorga <rmayorga@debian.org>,
  gregor herrmann <gregoa@debian.org>,
  Fabrizio Regalli <fabreg@fabreg.it>
-Standards-Version: 3.7.3
+Standards-Version: 3.9.2
 Homepage: http://search.cpan.org/dist/Readonly/
 Vcs-Svn: svn://svn.debian.org/pkg-perl/trunk/libreadonly-perl/
 Vcs-Browser: http://svn.debian.org/viewsvn/pkg-perl/trunk/libreadonly-perl/
