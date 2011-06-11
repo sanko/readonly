@@ -13,7 +13,15 @@ libreadonly-perl (1.03-3) UNRELEASED; urgency=low
   [ gregor herrmann ]
   * Change my email address.
 
- -- Rene Mayorga <rmayorga@debian.org>  Tue, 20 Jan 2009 01:28:42 -0600
+  [ Fabrizio Regalli ]
+  * Bump to 3.9.2 Standard-Version.
+  * Switch to DEP5 license format.
+  * Add myself to Uploaders.
+  * Switch d/compat to 8.
+  * Build-Depends: switch to debhelper (>= 8).
+  * Bump to 3.0 quilt format.
+ 
+ -- Fabrizio Regalli <fabreg@fabreg.it>  Sat, 11 Jun 2011 16:35:16 +0200
 
 libreadonly-perl (1.03-2) unstable; urgency=low
 

@@ -1,21 +1,31 @@
-This package was debianized by Rene Mayorga <rmayorga@debian.org.sv> on
-Mon, 22 Oct 2007 20:42:47 -0600.
+Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
+Maintainer: Eric J. Roode <roode@cpan.org>
+Source: http://search.cpan.org/dist/Readonly/
+Name: Readonly
 
-It was downloaded from: http://search.cpan.org/dist/Readonly/
+Files: *
+Copyright: 2001-2004 Eric J. Roode <roode@cpan.org>
+License: Artistic or GPL-1+
 
-Upstream Author: 
-    Eric J. Roode <roode@cpan.org>
+Files: debian/*
+Copyright: 2007, Rene Mayorga <rmayorga@debian.org.sv>
+ 2008, gregor herrmann <gregor+debian@comodo.priv.at>
+ 2009, Rene Mayorga <rmayorga@debian.org>
+ 2011, Fabrizio Regalli <fabreg@fabreg.it>
+License: Artistic or GPL-1+
 
-Copyright: 
+License: Artistic
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the Artistic License, which comes with Perl.
+ .
+ On Debian systems, the complete text of the Artistic License can be
+ found in `/usr/share/common-licenses/Artistic'.
 
-   Copyright (c) 2001-2004 by Eric J. Roode. All Rights Reserved
-   This module is free software; you can redistribute it and/or modify 
-   it under the same terms as Perl itself.
-   
-   Perl is distributed under your choice of the GNU General Public License or
-   the Artistic License.  On Debian GNU/Linux systems, the complete text of the
-   GNU General Public License can be found in `/usr/share/common-licenses/GPL'
-   and the Artistic Licence in `/usr/share/common-licenses/Artistic'.
-
-The Debian packaging is (C) 2007, Rene Mayorga <rmayorga@debian.org.sv> and
-is licensed under the GPL, see `/usr/share/common-licenses/GPL'.
+License: GPL-1+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 1, or (at your option)
+ any later version.
+ .
+ On Debian systems, the complete text of version 1 of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-1'.
