@@ -2,3 +2,10 @@
 
 %:
 	dh $@
+
+PACKAGE = $(shell dh_listpackages)
+TMP     = $(CURDIR)/debian/$(PACKAGE)
+
+override_dh_auto_install:
+	dh_auto_install
+	rm $(TMP)/usr/share/perl5/benchmark.pl\
