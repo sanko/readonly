@@ -1,3 +1,9 @@
+libreadonly-perl (1.03-4) UNRELEASED; urgency=low
+
+  * debian/control: Convert Vcs-* fields to Git.
+
+ -- Ansgar Burchardt <ansgar@debian.org>  Wed, 27 Jul 2011 18:47:30 +0200
+
 libreadonly-perl (1.03-3) unstable; urgency=low
 
   [ gregor herrmann ]
