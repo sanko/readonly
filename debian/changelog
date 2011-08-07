@@ -1,6 +1,11 @@
 libreadonly-perl (1.03-4) UNRELEASED; urgency=low
 
+  [ Ansgar Burchardt ]
   * debian/control: Convert Vcs-* fields to Git.
+
+  [ Salvatore Bonaccorso ]
+  * debian/copyright: Replace DEP5 Format-Specification URL from
+    svn.debian.org to anonscm.debian.org URL.
 
  -- Ansgar Burchardt <ansgar@debian.org>  Wed, 27 Jul 2011 18:47:30 +0200
 
