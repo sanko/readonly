@@ -1,13 +1,17 @@
-libreadonly-perl (1.03-4) UNRELEASED; urgency=low
+libreadonly-perl (1.03-4) unstable; urgency=low
+
+  * Team upload
 
   [ Ansgar Burchardt ]
   * debian/control: Convert Vcs-* fields to Git.
 
-  [ Salvatore Bonaccorso ]
-  * debian/copyright: Replace DEP5 Format-Specification URL from
-    svn.debian.org to anonscm.debian.org URL.
+  [ Alessandro Ghedini ]
+  * Recommends libreadonly-xs-perl as per documentation (Closes: #677105)
+  * Add remove-pgp-signature.patch (Closes: #677103)
+  * Bump Standards-Version to 3.9.3 (no changes needed)
+  * Update copyright to Copyright-Format 1.0
 
- -- Ansgar Burchardt <ansgar@debian.org>  Wed, 27 Jul 2011 18:47:30 +0200
+ -- Alessandro Ghedini <ghedo@debian.org>  Mon, 11 Jun 2012 20:03:17 +0200
 
 libreadonly-perl (1.03-3) unstable; urgency=low
 
