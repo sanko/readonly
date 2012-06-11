@@ -1,0 +1,38 @@
+Description: Remove the PGP signature from Readonly's POD
+ (which shows up in the manpage too)
+Origin: vendor
+Bug-Debian: http://bugs.debian.org/677103
+Author: Alessandro Ghedini <ghedo@debian.org>
+Reviewed-by: Alessandro Ghedini <ghedo@debian.org>
+Last-Update: 2012-06-11
+
+--- a/Readonly.pm
++++ b/Readonly.pm
+@@ -1,10 +1,3 @@
+-=for gpg
+------BEGIN PGP SIGNED MESSAGE-----
+-Hash: SHA1
+-
+-- -----BEGIN PGP SIGNED MESSAGE-----
+-Hash: SHA1
+-
+ =head1 NAME
+ 
+ Readonly - Facility for creating read-only scalars, arrays, hashes.
+@@ -789,15 +782,3 @@
+ in stores!  Readonly::XS sold separately.  Void where prohibited.
+ 
+ =cut
+-
+-=begin gpg
+-
+------BEGIN PGP SIGNATURE-----
+-Version: GnuPG v1.2.4 (MingW32)
+-
+-iD8DBQFAhaGCY96i4h5M0egRAg++AJ0ar4ncojbOp0OOc2wo+E/1cBn5cQCg9eP9
+-qTzAC87PuyKB+vrcRykrDbo=
+-=39Ny
+------END PGP SIGNATURE-----
+-
+-=cut
+\ Manca newline alla fine del file
