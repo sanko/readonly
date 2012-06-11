@@ -1,7 +1,7 @@
-Format-Specification: http://anonscm.debian.org/viewvc/dep/web/deps/dep5.mdwn?view=markup&pathrev=135
-Maintainer: Eric J. Roode <roode@cpan.org>
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Readonly
+Upstream-Contact: Eric J. Roode <roode@cpan.org>
 Source: http://search.cpan.org/dist/Readonly/
-Name: Readonly
 
 Files: *
 Copyright: 2001-2004 Eric J. Roode <roode@cpan.org>
@@ -28,3 +28,4 @@ License: GPL-1+
  .
  On Debian systems, the complete text of version 1 of the GNU General
  Public License can be found in `/usr/share/common-licenses/GPL-1'.
+
