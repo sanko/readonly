@@ -1,3 +1,9 @@
+libreadonly-perl (1.03-5) UNRELEASED; urgency=low
+
+  * Change Vcs-Git to canonical URI (git://anonscm.debian.org)
+
+ -- Salvatore Bonaccorso <carnil@debian.org>  Sun, 06 Jan 2013 22:06:23 +0100
+
 libreadonly-perl (1.03-4) unstable; urgency=low
 
   * Team upload
