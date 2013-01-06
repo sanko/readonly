@@ -9,7 +9,7 @@ Uploaders: Rene Mayorga <rmayorga@debian.org>,
  Fabrizio Regalli <fabreg@fabreg.it>
 Standards-Version: 3.9.3
 Homepage: http://search.cpan.org/dist/Readonly/
-Vcs-Git: git://git.debian.org/pkg-perl/packages/libreadonly-perl.git
+Vcs-Git: git://anonscm.debian.org/pkg-perl/packages/libreadonly-perl.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-perl/packages/libreadonly-perl.git
 
 Package: libreadonly-perl
