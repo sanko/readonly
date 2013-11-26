@@ -1,5 +1,10 @@
 Revision history for Perl extension Readonly.
 
+{{$NEXT}}
+	- Module now maintained by Sanko Robinson. Please see TODO for a possible
+	  set of changes to this module that may effect code written for old, pre-
+	  perl 5.14.0 platforms!!!
+
 1.03  2004 April 20
 	- Changed the prototype for Readonly, to make the usage cleaner.
 	 Unfortunately, this breaks backwards-compatability for this
