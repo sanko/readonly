@@ -86,7 +86,7 @@ pragma.  There are several problems with this pragma.
     (who thinks to use a unary plus when using a hash?)
 
 - `use constant` works for scalars and arrays, not hashes.
-- These constants are global ot the package in which they're declared;
+- These constants are global to the package in which they're declared;
 cannot be lexically scoped.
 - Works only at compile time.
 - Can be overridden:
