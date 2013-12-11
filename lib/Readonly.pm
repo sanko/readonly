@@ -9,7 +9,7 @@ use vars qw/@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS/;
 push @ISA,       'Exporter';
 push @EXPORT,    qw/Readonly/;
 push @EXPORT_OK, qw/Scalar Array Hash Scalar1 Array1 Hash1/;
-our $VERSION = '1.04';
+our $VERSION = '1.05';
 
 # Autocroak (Thanks, MJD)
 # Only load Carp.pm if module is croaking.
@@ -30,6 +30,7 @@ $REASSIGN = 'Attempt to reassign a readonly';
 $ODDHASH  = 'May not store an odd number of values in a hash';
 
 # See if we can use the XS stuff.
+$Readonly::XS::MAGIC_COOKIE = "Do NOT use or require Readonly::XS unless you're me.";
 eval 'use Readonly::XS';
 
 # Include specialized tie modules

@@ -1,7 +1,14 @@
 Revision history for Perl extension Readonly.
 
 {{$NEXT}}
+	- Merged typo fix from David Steinbrunner RT#86350/#2
 	- Merged patch (w/ tests, yay!) from Daniel P. Risse RT#37864
+	- Upstream magic related bugs were reported to p5p and fixed in perl
+	  itself so we can resolve the following local issues: RT#70167, RT#57382,
+	  RT#29487, RT#36653, RT#24216.
+	- Reported RT#120122 (tie + smartmatch bug) upstream to p5p. Will
+	  eventually resolve local [RT#59256].
+	- Note: Resolved RT#16167 (benchmark.pl being installed) in 1.04.
 
 1.04 2013-11-26T01:20:38Z
 	- Module now maintained by Sanko Robinson. Please see TODO for a possible

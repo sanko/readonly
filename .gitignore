@@ -18,3 +18,4 @@ nytprof.out
 pm_to_blib
 *.bak
 *.tar.gz
+_bugs/
