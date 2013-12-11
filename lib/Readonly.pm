@@ -305,7 +305,7 @@ For example:
 
 =item * C<use constant> works for scalars and arrays, not hashes.
 
-=item * These constants are global ot the package in which they're declared;
+=item * These constants are global to the package in which they're declared;
 cannot be lexically scoped.
 
 =item * Works only at compile time.
