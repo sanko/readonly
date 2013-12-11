@@ -177,7 +177,12 @@ eval q{sub Readonly} . ($] < 5.008 ? '' : '(\[$@%]@)') . <<'SUB_READONLY';
         croak "$REASSIGN $badtype" if $badtype;
         croak "Readonly scalar must have only one value" if @_ > 2;
         my $tieobj = eval { tie ${$_[0]}, 'Readonly::Scalar', $_[1] };
-
+        if ( ref $_[1] eq 'HASH' ) {
+            Hash %{$_[1]}, %{$_[1]};
+        }
+        elsif ( ref $_[1] eq 'ARRAY' ) {
+            Array @{$_[1]}, @{$_[1]};
+        }
 # Tie may have failed because user tried to tie a constant, or we screwed up somehow.
         if ($@) {
             croak $MODIFY

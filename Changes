@@ -1,6 +1,9 @@
 Revision history for Perl extension Readonly.
 
 {{$NEXT}}
+	- Merged patch (w/ tests, yay!) from Daniel P. Risse RT#37864
+
+1.04 2013-11-26T01:20:38Z
 	- Module now maintained by Sanko Robinson. Please see TODO for a possible
 	  set of changes to this module that may effect code written for old, pre-
 	  perl 5.14.0 platforms!!!
