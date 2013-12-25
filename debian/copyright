@@ -1,15 +1,16 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Readonly
-Upstream-Contact: Eric J. Roode <roode@cpan.org>
+Upstream-Contact: Sanko Robinson <sanko@cpan.org>
 Source: https://metacpan.org/release/Readonly/
 
 Files: *
-Copyright: 2001-2004 Eric J. Roode <roode@cpan.org>
+Copyright: 2001-2004, Eric J. Roode <roode@cpan.org>
+ 2013, Sanko Robinson <sanko@cpan.org>
 License: Artistic or GPL-1+
 
 Files: debian/*
 Copyright: 2007-2009, Rene Mayorga <rmayorga@debian.org>
- 2008, gregor herrmann <gregoa@debian.org>
+ 2008-2013, gregor herrmann <gregoa@debian.org>
  2011, Fabrizio Regalli <fabreg@fabreg.it>
 License: Artistic or GPL-1+
 
