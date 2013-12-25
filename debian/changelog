@@ -1,9 +1,13 @@
-libreadonly-perl (1.03-5) UNRELEASED; urgency=low
+libreadonly-perl (1.04-1) UNRELEASED; urgency=low
 
+  [ Salvatore Bonaccorso ]
   * Change Vcs-Git to canonical URI (git://anonscm.debian.org)
   * Change search.cpan.org based URIs to metacpan.org based URIs
 
- -- Salvatore Bonaccorso <carnil@debian.org>  Sun, 06 Jan 2013 22:06:23 +0100
+  [ gregor herrmann ]
+  * New upstream release.
+
+ -- gregor herrmann <gregoa@debian.org>  Wed, 25 Dec 2013 19:50:51 +0100
 
 libreadonly-perl (1.03-4) unstable; urgency=low
 
