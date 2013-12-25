@@ -1,0 +1,89 @@
+{
+   "abstract" : "Facility for creating read-only scalars, arrays, hashes",
+   "author" : [
+      "Sanko Robinson <sanko@cpan.org> - http://sankorobinson.com/"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Minilla/v0.10.0",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Readonly",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "xt",
+         "inc",
+         "share",
+         "eg",
+         "examples",
+         "author",
+         "builder"
+      ]
+   },
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "CPAN::Meta" : "0",
+            "CPAN::Meta::Prereqs" : "0",
+            "Module::Build" : "0.38"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Test::CPAN::Meta" : "0",
+            "Test::MinimumVersion" : "0.10108",
+            "Test::Pod" : "1.41",
+            "Test::Spellunker" : "v0.2.7"
+         }
+      },
+      "runtime" : {
+         "recommends" : {
+            "Readonly::XS" : "1.06",
+            "perl" : "v5.10.0"
+         },
+         "requires" : {
+            "perl" : "5.006"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0"
+         }
+      }
+   },
+   "provides" : {
+      "Readonly" : {
+         "file" : "lib/Readonly.pm",
+         "version" : "1.04"
+      },
+      "Readonly::Array" : {
+         "file" : "lib/Readonly/Array.pm",
+         "version" : "1.04"
+      },
+      "Readonly::Hash" : {
+         "file" : "lib/Readonly/Hash.pm",
+         "version" : "1.04"
+      },
+      "Readonly::Scalar" : {
+         "file" : "lib/Readonly/Scalar.pm",
+         "version" : "1.04"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/sanko/readonly/issues"
+      },
+      "homepage" : "https://github.com/sanko/readonly",
+      "repository" : {
+         "url" : "https://github.com/sanko/readonly.git",
+         "web" : "https://github.com/sanko/readonly"
+      }
+   },
+   "version" : "1.04"
+}

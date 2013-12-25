@@ -1,10 +1,50 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Readonly
-version:      1.03
-version_from: Readonly.pm
-installdirs:  site
+---
+abstract: 'Facility for creating read-only scalars, arrays, hashes'
+author:
+  - 'Sanko Robinson <sanko@cpan.org> - http://sankorobinson.com/'
+build_requires:
+  Test::More: 0
+configure_requires:
+  CPAN::Meta: 0
+  CPAN::Meta::Prereqs: 0
+  Module::Build: 0.38
+dynamic_config: 0
+generated_by: 'Minilla/v0.10.0, CPAN::Meta::Converter version 2.132140'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Readonly
+no_index:
+  directory:
+    - t
+    - xt
+    - inc
+    - share
+    - eg
+    - examples
+    - author
+    - builder
+provides:
+  Readonly:
+    file: lib/Readonly.pm
+    version: 1.04
+  Readonly::Array:
+    file: lib/Readonly/Array.pm
+    version: 1.04
+  Readonly::Hash:
+    file: lib/Readonly/Hash.pm
+    version: 1.04
+  Readonly::Scalar:
+    file: lib/Readonly/Scalar.pm
+    version: 1.04
+recommends:
+  Readonly::XS: 1.06
+  perl: v5.10.0
 requires:
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.17
+  perl: 5.006
+resources:
+  bugtracker: https://github.com/sanko/readonly/issues
+  homepage: https://github.com/sanko/readonly
+  repository: https://github.com/sanko/readonly.git
+version: 1.04
