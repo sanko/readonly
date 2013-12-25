@@ -1,4 +1,4 @@
-libreadonly-perl (1.04-1) UNRELEASED; urgency=low
+libreadonly-perl (1.04-1) unstable; urgency=low
 
   [ Salvatore Bonaccorso ]
   * Change Vcs-Git to canonical URI (git://anonscm.debian.org)
@@ -6,8 +6,15 @@ libreadonly-perl (1.04-1) UNRELEASED; urgency=low
 
   [ gregor herrmann ]
   * New upstream release.
+  * Update installation of example script.
+  * Don't install README anymore.
+    This is only a text version of the POD/manpage.
+  * Drop remove-pgp-signature.patch, not needed anymore.
+  * Update Upstream-Contact and copyright holders.
+  * Update Build-Depends and Recommends.
+  * Declare compliance with Debian Policy 3.9.5.
 
- -- gregor herrmann <gregoa@debian.org>  Wed, 25 Dec 2013 19:50:51 +0100
+ -- gregor herrmann <gregoa@debian.org>  Wed, 25 Dec 2013 20:10:51 +0100
 
 libreadonly-perl (1.03-4) unstable; urgency=low
 
