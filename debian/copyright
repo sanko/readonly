@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Readonly
 Upstream-Contact: Sanko Robinson <sanko@cpan.org>
-Source: https://metacpan.org/release/Readonly/
+Source: https://metacpan.org/release/Readonly
 
 Files: *
 Copyright: 2001-2004, Eric J. Roode <roode@cpan.org>

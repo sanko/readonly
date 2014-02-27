@@ -9,7 +9,7 @@ Uploaders: Rene Mayorga <rmayorga@debian.org>,
            gregor herrmann <gregoa@debian.org>,
            Fabrizio Regalli <fabreg@fabreg.it>
 Standards-Version: 3.9.5
-Homepage: https://metacpan.org/release/Readonly/
+Homepage: https://metacpan.org/release/Readonly
 Vcs-Git: git://anonscm.debian.org/pkg-perl/packages/libreadonly-perl.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-perl/packages/libreadonly-perl.git
 
