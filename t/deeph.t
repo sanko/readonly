@@ -1,4 +1,4 @@
-#!perl -I..
+#!perl -I../lib
 # Test Hash vs Hash1 functionality
 use strict;
 use Test::More tests => 13;

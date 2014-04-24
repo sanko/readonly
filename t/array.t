@@ -1,4 +1,4 @@
-#!perl -I..
+#!perl -I../lib
 # Readonly array tests
 use strict;
 use Test::More tests => 23;

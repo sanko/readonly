@@ -1,4 +1,4 @@
-#!perl -I..
+#!perl -I../lib
 # Test Scalar vs Scalar1 functionality
 use strict;
 use Test::More tests => 21;

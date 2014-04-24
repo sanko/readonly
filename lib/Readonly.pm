@@ -18,25 +18,140 @@ sub croak {
     goto &Carp::croak;
 }
 
-# These functions may be overridden by Readonly::XS, if installed.
-sub is_sv_readonly ($)   {0}
-sub make_sv_readonly ($) { die "make_sv_readonly called but not overridden" }
-use vars qw/$XSokay/;    # Set to true in Readonly::XS, if available
-
 # Common error messages, or portions thereof
 use vars qw/$MODIFY $REASSIGN $ODDHASH/;
 $MODIFY   = 'Modification of a read-only value attempted';
 $REASSIGN = 'Attempt to reassign a readonly';
 $ODDHASH  = 'May not store an odd number of values in a hash';
+use vars qw/$XSokay/;    # Set to true in Readonly::XS, if available
 
-# See if we can use the XS stuff.
-$Readonly::XS::MAGIC_COOKIE = "Do NOT use or require Readonly::XS unless you're me.";
-eval 'use Readonly::XS';
+# For perl 5.8.x or higher
+# These functions are exposed in perl 5.8.x (Thanks, Leon!)
+# They may be overridden by Readonly::XS, if installed on old perl versions
+if ($] < 5.008) {    # 'Classic' perl
+    *is_sv_readonly = sub ($) {0};
+    *make_sv_readonly
+        = sub ($) { die "make_sv_readonly called but not overridden" };
 
-# Include specialized tie modules
-require Readonly::Array;
-require Readonly::Hash;
-require Readonly::Scalar;
+    # See if we can use the XS stuff.
+    $Readonly::XS::MAGIC_COOKIE
+        = "Do NOT use or require Readonly::XS unless you're me.";
+    eval 'use Readonly::XS';
+}
+else {                    # Modern perl doesn't need Readonly::XS
+    *is_sv_readonly = sub ($) { Internals::SvREADONLY($_[0]) };
+    *make_sv_readonly
+        = sub ($) { Internals::SvREADONLY($_[0], 1) };
+    $XSokay = 1;          # We're using the new built-ins
+}
+
+# Include specialized tie modules for 'Classic' perl
+{
+
+    package Readonly::Array;
+    our $VERSION = '1.05';
+
+    sub TIEARRAY {
+        my $whence
+            = (caller 1)[3]
+            ;             # Check if naughty user is trying to tie directly.
+        Readonly::croak "Invalid tie" unless $whence =~ /^Readonly::Array1?$/;
+        my $class = shift;
+        my @self  = @_;
+        return bless \@self, $class;
+    }
+
+    sub FETCH {
+        my $self  = shift;
+        my $index = shift;
+        return $self->[$index];
+    }
+
+    sub FETCHSIZE {
+        my $self = shift;
+        return scalar @$self;
+    }
+
+    BEGIN {
+        eval q{
+        sub EXISTS {
+           my $self  = shift;
+           my $index = shift;
+           return exists $self->[$index];
+           }
+    } if $] >= 5.006;    # couldn't do "exists" on arrays before then
+    }
+    *STORE = *STORESIZE = *EXTEND = *PUSH = *POP = *UNSHIFT = *SHIFT = *SPLICE
+        = *CLEAR = *UNTIE = sub { Readonly::croak $Readonly::MODIFY};
+}
+{
+
+    package Readonly::Hash;
+    our $VERSION = '1.05';
+
+    sub TIEHASH {
+        my $whence
+            = (caller 1)[3]
+            ;    # Check if naughty user is trying to tie directly.
+        Readonly::croak "Invalid tie" unless $whence =~ /^Readonly::Hash1?$/;
+        my $class = shift;
+
+        # must have an even number of values
+        Readonly::croak $Readonly::ODDHASH unless (@_ % 2 == 0);
+        my %self = @_;
+        return bless \%self, $class;
+    }
+
+    sub FETCH {
+        my $self = shift;
+        my $key  = shift;
+        return $self->{$key};
+    }
+
+    sub EXISTS {
+        my $self = shift;
+        my $key  = shift;
+        return exists $self->{$key};
+    }
+
+    sub FIRSTKEY {
+        my $self  = shift;
+        my $dummy = keys %$self;
+        return scalar each %$self;
+    }
+
+    sub NEXTKEY {
+        my $self = shift;
+        return scalar each %$self;
+    }
+    *STORE = *DELETE = *CLEAR = *UNTIE
+        = sub { Readonly::croak $Readonly::MODIFY};
+}
+{
+
+    package Readonly::Scalar;
+    our $VERSION = '1.05';
+
+    sub TIESCALAR {
+        my $whence
+            = (caller 2)[3]
+            ;    # Check if naughty user is trying to tie directly.
+        Readonly::croak "Invalid tie"
+            unless $whence && $whence =~ /^Readonly::(?:Scalar1?|Readonly)$/;
+        my $class = shift;
+        Readonly::croak "No value specified for readonly scalar" unless @_;
+        Readonly::croak "Too many values specified for readonly scalar"
+            unless @_ == 1;
+        my $value = shift;
+        return bless \$value, $class;
+    }
+
+    sub FETCH {
+        my $self = shift;
+        return $$self;
+    }
+    *STORE = *UNTIE = sub { Readonly::croak $Readonly::MODIFY};
+}
 
 # Predeclare the following, so we can use them recursively
 sub Scalar ($$);
@@ -53,14 +168,14 @@ sub _is_badtype {
 
 # Shallow Readonly scalar
 sub Scalar1 ($$) {
-    croak "$REASSIGN scalar" if is_sv_readonly $_[0];
+    croak "$REASSIGN scalar" if is_sv_readonly($_[0]);
     my $badtype = _is_badtype(ref tied $_[0]);
     croak "$REASSIGN $badtype" if $badtype;
 
     # xs method: flag scalar as readonly
     if ($XSokay) {
         $_[0] = $_[1];
-        make_sv_readonly $_[0];
+        make_sv_readonly($_[0]);
         return;
     }
 
@@ -99,7 +214,7 @@ sub Hash1 (\%;@) {
 
 # Deep Readonly scalar
 sub Scalar ($$) {
-    croak "$REASSIGN scalar" if is_sv_readonly $_[0];
+    croak "$REASSIGN scalar" if is_sv_readonly(\$_[0]);
     my $badtype = _is_badtype(ref tied $_[0]);
     croak "$REASSIGN $badtype" if $badtype;
     my $value = $_[1];
@@ -114,7 +229,7 @@ sub Scalar ($$) {
     # xs method: flag scalar as readonly
     if ($XSokay) {
         $_[0] = $value;
-        make_sv_readonly $_[0];
+        make_sv_readonly($_[0]);
         return;
     }
 

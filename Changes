@@ -9,6 +9,7 @@ Revision history for Perl extension Readonly.
 	- Reported RT#120122 (tie + smartmatch bug) upstream to p5p. Will
 	  eventually resolve local [RT#59256].
 	- Note: Resolved RT#16167 (benchmark.pl being installed) in 1.04.
+	- Use readonly support exposed in Internals on perl >=5.8.x
 
 1.04 2013-11-26T01:20:38Z
 	- Module now maintained by Sanko Robinson. Please see TODO for a possible
