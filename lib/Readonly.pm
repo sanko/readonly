@@ -7,7 +7,7 @@ use vars qw/@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS/;
 push @ISA,       'Exporter';
 push @EXPORT,    qw/Readonly/;
 push @EXPORT_OK, qw/Scalar Array Hash Scalar1 Array1 Hash1/;
-our $VERSION = 'v1.500.0';
+our $VERSION = 'v1.500.1';
 $VERSION = eval $VERSION;
 
 # Autocroak (Thanks, MJD)
@@ -702,7 +702,7 @@ http://github.com/sanko/readonly/issues.
 Please check the TODO file included with this distribution in case your bug
 is already known (...I probably won't file bug reports to myself).
 
-=head1 Acknowladgements
+=head1 Acknowledgements
 
 Thanks to Slaven Rezic for the idea of one common function (Readonly) for all
 three types of variables (13 April 2002).
