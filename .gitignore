@@ -6,6 +6,7 @@ inc/
 Build
 !Build/
 Build.bat
+Build.PL
 .last_cover_stats
 Makefile
 Makefile.old
