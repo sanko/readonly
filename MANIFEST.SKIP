@@ -1,5 +1,5 @@
 
-#!start included C:\strawberry\perl\lib\ExtUtils\MANIFEST.SKIP
+#!start included C:\Strawberry\perl\lib\ExtUtils\MANIFEST.SKIP
 # Avoid version control files.
 \bRCS\b
 \bCVS\b
@@ -55,5 +55,6 @@
 
 # Avoid MYMETA files
 ^MYMETA\.
-#!end included C:\strawberry\perl\lib\ExtUtils\MANIFEST.SKIP
+#!end included C:\Strawberry\perl\lib\ExtUtils\MANIFEST.SKIP
 
+MANIFEST\.SKIP
