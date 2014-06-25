@@ -10,7 +10,7 @@ sub expected {
     my $line = shift;
     $@ =~ s/\.$//;    # difference between croak and die
     return "Modification of a read-only value attempted at " . __FILE__
-        . " line $line\n";
+         . " line $line\n";
 }
 use vars qw/$s1 $s2 $s3 $s4/;
 my $m1 = 17;
