@@ -1,8 +1,9 @@
-libreadonly-perl (1.04-2) UNRELEASED; urgency=medium
+libreadonly-perl (1.500.0-1) UNRELEASED; urgency=medium
 
   * Strip trailing slash from metacpan URLs.
+  * New upstream release.
 
- -- gregor herrmann <gregoa@debian.org>  Thu, 27 Feb 2014 22:40:08 +0100
+ -- gregor herrmann <gregoa@debian.org>  Thu, 26 Jun 2014 20:35:07 +0200
 
 libreadonly-perl (1.04-1) unstable; urgency=low
 
