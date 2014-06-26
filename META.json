@@ -4,7 +4,7 @@
       "Sanko Robinson <sanko@cpan.org> - http://sankorobinson.com/"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.10.0",
+   "generated_by" : "Minilla/v1.1.0",
    "license" : [
       "perl_5"
    ],
@@ -36,18 +36,18 @@
       "develop" : {
          "requires" : {
             "Test::CPAN::Meta" : "0",
-            "Test::MinimumVersion" : "0.10108",
+            "Test::MinimumVersion::Fast" : "0.04",
+            "Test::PAUSE::Permissions" : "0.04",
             "Test::Pod" : "1.41",
             "Test::Spellunker" : "v0.2.7"
          }
       },
       "runtime" : {
          "recommends" : {
-            "Readonly::XS" : "1.06",
-            "perl" : "v5.10.0"
+            "perl" : "v5.20.0"
          },
          "requires" : {
-            "perl" : "5.006"
+            "perl" : "v5.6.0"
          }
       },
       "test" : {
@@ -59,19 +59,19 @@
    "provides" : {
       "Readonly" : {
          "file" : "lib/Readonly.pm",
-         "version" : "1.04"
+         "version" : "v1.500.0"
       },
       "Readonly::Array" : {
-         "file" : "lib/Readonly/Array.pm",
-         "version" : "1.04"
+         "file" : "lib/Readonly.pm",
+         "version" : "1.05"
       },
       "Readonly::Hash" : {
-         "file" : "lib/Readonly/Hash.pm",
-         "version" : "1.04"
+         "file" : "lib/Readonly.pm",
+         "version" : "1.05"
       },
       "Readonly::Scalar" : {
-         "file" : "lib/Readonly/Scalar.pm",
-         "version" : "1.04"
+         "file" : "lib/Readonly.pm",
+         "version" : "1.05"
       }
    },
    "release_status" : "stable",
@@ -85,5 +85,8 @@
          "web" : "https://github.com/sanko/readonly"
       }
    },
-   "version" : "1.04"
+   "version" : "v1.500.0",
+   "x_contributors" : [
+      "David Steinbrunner <dsteinbrunner@pobox.com>"
+   ]
 }

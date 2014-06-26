@@ -1,4 +1,3 @@
-#!perl -I..
 # Test Array vs Array1 functionality
 use strict;
 use Test::More tests => 13;

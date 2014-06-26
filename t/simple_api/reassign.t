@@ -1,4 +1,4 @@
-#!perl -I..
+#!perl -I../../lib
 # Readonly reassignment-prevention tests
 use strict;
 use Test::More tests => 22;
@@ -6,27 +6,27 @@ use Test::More tests => 22;
 # Find the module (1 test)
 BEGIN { use_ok('Readonly'); }
 use vars qw($s1 @a1 %h1 $s2 @a2 %h2);
-Readonly::Scalar $s1 => 'a scalar value';
-Readonly::Array @a1 => 'an', 'array', 'value';
-Readonly::Hash %h1 => {a => 'hash', of => 'things'};
+Readonly $s1 => 'a scalar value';
+Readonly @a1 => 'an', 'array', 'value';
+Readonly %h1 => {a => 'hash', of => 'things'};
 my $err = qr/^Attempt to reassign/;
 
 # Reassign scalar
-eval { Readonly::Scalar $s1 => "a second scalar value" };
-like $@ => $err, 'Readonly::Scalar reassign die';
-is $s1 => 'a scalar value', 'Readonly::Scalar reassign no effect';
+eval { Readonly $s1 => "a second scalar value" };
+ok defined $@, 'Readonly reassign die';
+is $s1 => 'a scalar value', 'Readonly reassign no effect';
 
 # Reassign array
-eval { Readonly::Array @a1 => "another", "array" };
-like $@ => $err, 'Readonly::Array reassign die';
+eval { Readonly @a1 => "another", "array" };
+like $@ => $err, 'Readonly reassign die';
 ok eq_array(\@a1, [qw[an array value]]) =>
-    'Readonly::Array reassign no effect';
+    'Readonly reassign no effect';
 
 # Reassign hash
-eval { Readonly::Hash %h1 => "another", "hash" };
-like $@ => $err, 'Readonly::Hash reassign die';
+eval { Readonly %h1 => "another", "hash" };
+like $@ => $err, 'Readonly reassign die';
 ok eq_hash(\%h1, {a => 'hash', of => 'things'}) =>
-    'Readonly::Hash reassign no effect';
+    'Readonly reassign no effect';
 
 # Now use the naked Readonly function
 SKIP:
@@ -87,7 +87,7 @@ SKIP:
 }
 
 # Reassign real constants
-eval q{Readonly::Scalar "hello" => "goodbye"};
-like $@ => $err, 'Reassign real string';
-eval q{Readonly::Scalar1 6 => 13};
-like $@ => $err, 'Reassign real number';
+eval q{Readonly "hello" => "goodbye"};
+ok defined $@, 'Reassign real string';
+eval q{Readonly 6 => 13};
+ok defined $@, 'Reassign real number';

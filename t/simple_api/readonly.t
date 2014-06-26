@@ -1,18 +1,24 @@
-#!perl -I..
+#!perl -I../../lib
 # Test the Readonly function
 use strict;
-use Test::More tests => 19;
+use Test::More tests => 23;
 
 # Find the module (1 test)
 BEGIN { use_ok('Readonly'); }
 my $expected
     = qr/Modification of a read-only value attempted at \(eval \d+\),? line 1/;
 SKIP:
-{   skip 'Readonly \\ syntax is for perls earlier than 5.8', 9 if $] >= 5.008;
+{   skip 'Readonly \\ syntax is for perls earlier than 5.8', 11
+        if $] >= 5.008;
     eval q{Readonly \my $ros => 45};
     is $@ => '', 'Create scalar';
     eval q{Readonly \my $ros2 => 45;  $ros2 = 45};
     like $@ => $expected, 'Modify scalar';
+    eval q{Readonly \my $roaref => [1, 2, 3, 4]; $roaref->[2] = 3};
+    like $@ => $expected, 'Modify scalar array reference';
+    eval
+        q{Readonly \my $rohref => { key1 => "value", key2 => "value2" }; $rohref->{key1} = "value"};
+    like $@ => $expected, 'Modify scalar hash reference';
     eval q{Readonly \my @roa => (1, 2, 3, 4)};
     is $@ => '', 'Create array';
     eval q{Readonly \my @roa2 => (1, 2, 3, 4); $roa2[2] = 3};
@@ -31,11 +37,17 @@ SKIP:
     like $@ => $expected, 'Modify hash';
 }
 SKIP:
-{   skip 'Readonly $@% syntax is for perl 5.8 or later', 9 unless $] >= 5.008;
+{   skip 'Readonly $@% syntax is for perl 5.8 or later', 11
+        unless $] >= 5.008;
     eval q{Readonly my $ros => 45};
     is $@ => '', 'Create scalar';
     eval q{Readonly my $ros2 => 45;  $ros2 = 45};
     like $@ => $expected, 'Modify scalar';
+    eval q{Readonly my $roaref => [1, 2, 3, 4]; $roaref->[2] = 3};
+    like $@ => $expected, 'Modify scalar array reference';
+    eval
+        q{Readonly my $rohref => { key1 => "value", key2 => "value2" }; $rohref->{key1} = "value"};
+    like $@ => $expected, 'Modify scalar hash reference';
     eval q{Readonly my @roa => (1, 2, 3, 4)};
     is $@ => '', 'Create array';
     eval q{Readonly my @roa2 => (1, 2, 3, 4); $roa2[2] = 3};
