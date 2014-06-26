@@ -1,9 +1,15 @@
-libreadonly-perl (1.500.0-1) UNRELEASED; urgency=medium
+libreadonly-perl (1.500.0-1) unstable; urgency=medium
 
-  * Strip trailing slash from metacpan URLs.
   * New upstream release.
+  * Strip trailing slash from metacpan URLs.
+  * Update years of upstream and packaging copyright.
+  * Drop Recommends: on libreadonly-xs-perl.
+    Readonly now uses perl's formerly private functions directly, so
+    Readonly::XS is no longer needed or useful.
+    For details see the "Internals" section in Readonly(3pm).
+  * Add a patch to fix a spelling mistake in the documentation.
 
- -- gregor herrmann <gregoa@debian.org>  Thu, 26 Jun 2014 20:35:07 +0200
+ -- gregor herrmann <gregoa@debian.org>  Thu, 26 Jun 2014 20:54:21 +0200
 
 libreadonly-perl (1.04-1) unstable; urgency=low
 
