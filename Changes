@@ -2,6 +2,7 @@ Revision history for Perl extension Readonly.
 
 {{$NEXT}}
     - Minor documentation fixes (spell check, etc.)
+    - Patch from Gregor Herrmann <gregoa@debian.org> resolves #7
 
 v1.500.0 2014-06-25T19:56:18Z
     - PLEASE NOTE: Readonly::XS is no longer needed!

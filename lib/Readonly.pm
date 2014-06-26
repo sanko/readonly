@@ -663,7 +663,7 @@ To 'fix' this, Readonly::XS was written. If installed, Readonly::XS used the
 internal methods C<SvREADONLY> and C<SvREADONLY_on> to lock simple scalars. On
 the surface, everything was peachy but things weren't the same behind the
 scenes. In edge cases, code perfromed very differently if Readonly::XS was
-installed and because it wasn't a required dependancy in most code, it made
+installed and because it wasn't a required dependency in most code, it made
 downstream bugs very hard to track.
 
 In the years since Readonly::XS was released, the then private internal
@@ -676,7 +676,7 @@ modern builds of perl.
 
 =item * You do not need to install Readonly::XS.
 
-=item * You should stop listing Readonly::XS as a dependancy or expect it to
+=item * You should stop listing Readonly::XS as a dependency or expect it to
 be installed.
 
 =item * Stop testing the C<$Readonly::XSokay> variable!
