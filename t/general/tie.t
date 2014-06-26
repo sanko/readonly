@@ -1,4 +1,4 @@
-#!perl -I..
+#!perl -I../../lib
 # Test the Readonly function
 use strict;
 use Test::More tests => 4;

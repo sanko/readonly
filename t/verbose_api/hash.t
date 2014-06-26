@@ -1,4 +1,4 @@
-#!perl -I..
+#!perl -I../lib
 # Readonly hash tests
 use strict;
 use Test::More tests => 20;
