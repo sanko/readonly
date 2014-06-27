@@ -3,11 +3,6 @@ use 5.005;
 use strict;
 
 #use warnings;
-use Exporter;
-use vars qw/@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS/;
-push @ISA,       'Exporter';
-push @EXPORT,    qw/Readonly/;
-push @EXPORT_OK, qw/Scalar Array Hash Scalar1 Array1 Hash1/;
 #no warnings 'uninitialized';
 package Readonly;
 our $VERSION = '1.06';
@@ -20,11 +15,7 @@ sub croak {
     goto &Carp::croak;
 }
 
-# Common error messages, or portions thereof
-use vars qw/$MODIFY $REASSIGN $ODDHASH/;
-$MODIFY   = 'Modification of a read-only value attempted';
-$REASSIGN = 'Attempt to reassign a readonly';
-$ODDHASH  = 'May not store an odd number of values in a hash';
+# These functions may be overridden by Readonly::XS, if installed.
 use vars qw/$XSokay/;    # Set to true in Readonly::XS, if available
 
 # For perl 5.8.x or higher
@@ -47,113 +38,125 @@ else {               # Modern perl doesn't need Readonly::XS
     $XSokay = 1;     # We're using the new built-ins so this is a white lie
 }
 
-# Include specialized tie modules for 'Classic' perl
-{
+# Common error messages, or portions thereof
+use vars qw/$MODIFY $REASSIGN $ODDHASH/;
+$MODIFY   = 'Modification of a read-only value attempted';
+$REASSIGN = 'Attempt to reassign a readonly';
+$ODDHASH  = 'May not store an odd number of values in a hash';
 
-    package Readonly::Array;
-    our $VERSION = '1.05';
+# ----------------
+# Read-only scalars
+# ----------------
+package Readonly::Scalar;
 
-    sub TIEARRAY {
-        my $whence
-            = (caller 1)[3]
-            ;        # Check if naughty user is trying to tie directly.
-        Readonly::croak "Invalid tie" unless $whence =~ /^Readonly::Array1?$/;
-        my $class = shift;
-        my @self  = @_;
-        return bless \@self, $class;
-    }
+sub TIESCALAR {
+    my $whence
+        = (caller 2)[3];    # Check if naughty user is trying to tie directly.
+    Readonly::croak "Invalid tie"
+        unless $whence && $whence =~ /^Readonly::(?:Scalar1?|Readonly)$/;
+    my $class = shift;
+    Readonly::croak "No value specified for readonly scalar" unless @_;
+    Readonly::croak "Too many values specified for readonly scalar"
+        unless @_ == 1;
+    my $value = shift;
+    return bless \$value, $class;
+}
 
-    sub FETCH {
-        my $self  = shift;
-        my $index = shift;
-        return $self->[$index];
-    }
+sub FETCH {
+    my $self = shift;
+    return $$self;
+}
+*STORE = *UNTIE = sub { Readonly::croak $Readonly::MODIFY};
 
-    sub FETCHSIZE {
-        my $self = shift;
-        return scalar @$self;
-    }
+# ----------------
+# Read-only arrays
+# ----------------
+package Readonly::Array;
 
-    BEGIN {
-        eval q{
-        sub EXISTS {
+sub TIEARRAY {
+    my $whence
+        = (caller 1)[3];    # Check if naughty user is trying to tie directly.
+    Readonly::croak "Invalid tie" unless $whence =~ /^Readonly::Array1?$/;
+    my $class = shift;
+    my @self  = @_;
+    return bless \@self, $class;
+}
+
+sub FETCH {
+    my $self  = shift;
+    my $index = shift;
+    return $self->[$index];
+}
+
+sub FETCHSIZE {
+    my $self = shift;
+    return scalar @$self;
+}
+
+BEGIN {
+    eval q{
+        sub EXISTS
+           {
            my $self  = shift;
            my $index = shift;
            return exists $self->[$index];
            }
     } if $] >= 5.006;    # couldn't do "exists" on arrays before then
-    }
-    *STORE = *STORESIZE = *EXTEND = *PUSH = *POP = *UNSHIFT = *SHIFT = *SPLICE
-        = *CLEAR = *UNTIE = sub { Readonly::croak $Readonly::MODIFY};
 }
-{
+*STORE = *STORESIZE = *EXTEND = *PUSH = *POP = *UNSHIFT = *SHIFT = *SPLICE
+    = *CLEAR = *UNTIE = sub { Readonly::croak $Readonly::MODIFY};
 
-    package Readonly::Hash;
-    our $VERSION = '1.05';
+# ----------------
+# Read-only hashes
+# ----------------
+package Readonly::Hash;
 
-    sub TIEHASH {
-        my $whence
-            = (caller 1)[3]
-            ;    # Check if naughty user is trying to tie directly.
-        Readonly::croak "Invalid tie" unless $whence =~ /^Readonly::Hash1?$/;
-        my $class = shift;
+sub TIEHASH {
+    my $whence
+        = (caller 1)[3];    # Check if naughty user is trying to tie directly.
+    Readonly::croak "Invalid tie" unless $whence =~ /^Readonly::Hash1?$/;
+    my $class = shift;
 
-        # must have an even number of values
-        Readonly::croak $Readonly::ODDHASH unless (@_ % 2 == 0);
-        my %self = @_;
-        return bless \%self, $class;
-    }
-
-    sub FETCH {
-        my $self = shift;
-        my $key  = shift;
-        return $self->{$key};
-    }
-
-    sub EXISTS {
-        my $self = shift;
-        my $key  = shift;
-        return exists $self->{$key};
-    }
-
-    sub FIRSTKEY {
-        my $self  = shift;
-        my $dummy = keys %$self;
-        return scalar each %$self;
-    }
-
-    sub NEXTKEY {
-        my $self = shift;
-        return scalar each %$self;
-    }
-    *STORE = *DELETE = *CLEAR = *UNTIE
-        = sub { Readonly::croak $Readonly::MODIFY};
+    # must have an even number of values
+    Readonly::croak $Readonly::ODDHASH unless (@_ % 2 == 0);
+    my %self = @_;
+    return bless \%self, $class;
 }
-{
 
-    package Readonly::Scalar;
-    our $VERSION = '1.05';
-
-    sub TIESCALAR {
-        my $whence
-            = (caller 2)[3]
-            ;    # Check if naughty user is trying to tie directly.
-        Readonly::croak "Invalid tie"
-            unless $whence && $whence =~ /^Readonly::(?:Scalar1?|Readonly)$/;
-        my $class = shift;
-        Readonly::croak "No value specified for readonly scalar" unless @_;
-        Readonly::croak "Too many values specified for readonly scalar"
-            unless @_ == 1;
-        my $value = shift;
-        return bless \$value, $class;
-    }
-
-    sub FETCH {
-        my $self = shift;
-        return $$self;
-    }
-    *STORE = *UNTIE = sub { Readonly::croak $Readonly::MODIFY};
+sub FETCH {
+    my $self = shift;
+    my $key  = shift;
+    return $self->{$key};
 }
+
+sub EXISTS {
+    my $self = shift;
+    my $key  = shift;
+    return exists $self->{$key};
+}
+
+sub FIRSTKEY {
+    my $self  = shift;
+    my $dummy = keys %$self;
+    return scalar each %$self;
+}
+
+sub NEXTKEY {
+    my $self = shift;
+    return scalar each %$self;
+}
+*STORE = *DELETE = *CLEAR = *UNTIE = sub { Readonly::croak $Readonly::MODIFY};
+
+# ----------------------------------------------------------------
+# Main package, containing convenience functions (so callers won't
+# have to explicitly tie the variables themselves).
+# ----------------------------------------------------------------
+package Readonly;
+use Exporter;
+use vars qw/@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS/;
+push @ISA,       'Exporter';
+push @EXPORT,    qw/Readonly/;
+push @EXPORT_OK, qw/Scalar Array Hash Scalar1 Array1 Hash1/;
 
 # Predeclare the following, so we can use them recursively
 sub Scalar ($$);

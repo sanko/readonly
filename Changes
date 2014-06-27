@@ -1,6 +1,7 @@
 Revision history for Perl extension Readonly.
 
 {{$NEXT}}
+    - Fix array and hash tie() while in XS mode (exposed by Params::Validate tests)
     - Fix implicit undef value regression resolves #8
     - Minor documentation fixes (spell check, etc.)
     - Patch from Gregor Herrmann <gregoa@debian.org> resolves #7
