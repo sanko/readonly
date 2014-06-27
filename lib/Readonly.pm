@@ -1,4 +1,5 @@
 package Readonly;
+use 5.005;
 use strict;
 
 #use warnings;
@@ -7,7 +8,9 @@ use vars qw/@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS/;
 push @ISA,       'Exporter';
 push @EXPORT,    qw/Readonly/;
 push @EXPORT_OK, qw/Scalar Array Hash Scalar1 Array1 Hash1/;
-our $VERSION = 'v1.500.1';
+#no warnings 'uninitialized';
+package Readonly;
+our $VERSION = '1.06';
 $VERSION = eval $VERSION;
 
 # Autocroak (Thanks, MJD)
