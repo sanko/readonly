@@ -284,28 +284,45 @@ sub Hash (\%;@) {
 }
 
 # Common entry-point for all supported data types
-eval q{sub Readonly} . ($] < 5.008 ? '' : '(\[$@%]@)') . <<'#SUB_READONLY';
-{   my $ref = shift;
-    my $type = ref $ref;
-    if ((!defined$type) || $type eq 'SCALAR') {
-        croak 'Not enough arguments for Readonly' if $#_ == -1;
-        return Scalar $$ref, shift;
+eval q{sub Readonly} . ($] < 5.008 ? '' : '(\[$@%]@)') . <<'SUB_READONLY';
+{
+    if (ref $_[0] eq 'SCALAR')
+    {
+        croak $MODIFY if is_sv_readonly ${$_[0]};
+        my $badtype = _is_badtype (ref tied ${$_[0]});
+        croak "$REASSIGN $badtype" if $badtype;
+        croak "Readonly scalar must have only one value" if @_ > 2;
+
+        my $tieobj = eval {tie ${$_[0]}, 'Readonly::Scalar', $_[1]};
+        # Tie may have failed because user tried to tie a constant, or we screwed up somehow.
+        if ($@)
+        {
+            croak $MODIFY if $@ =~ /^$MODIFY at/;    # Point the finger at the user.
+            die "$@\n";        # Not a modify read-only message; must be our fault.
+        }
+        return $tieobj;
     }
-    elsif ($type eq 'ARRAY') {
-        return Array @$ref, @_;
+    elsif (ref $_[0] eq 'ARRAY')
+    {
+        my $aref = shift;
+        return Array @$aref, @_;
     }
-    elsif ($type eq 'HASH') {
-        croak $ODDHASH if @_ % 2 != 0 && !(@_ == 1 && $type eq 'HASH');
-        return Hash %$ref, @_;
+    elsif (ref $_[0] eq 'HASH')
+    {
+        my $href = shift;
+        croak $ODDHASH  if @_%2 != 0  &&  !(@_ == 1  && ref $_[0] eq 'HASH');
+        return Hash %$href, @_;
     }
-    elsif ($type) {
+    elsif (ref $_[0])
+    {
         croak "Readonly only supports scalar, array, and hash variables.";
     }
-    else {
+    else
+    {
         croak "First argument to Readonly must be a reference.";
     }
 }
-#SUB_READONLY
+SUB_READONLY
 1;
 
 =head1 NAME
@@ -348,6 +365,7 @@ Readonly - Facility for creating read-only scalars, arrays, hashes
     Readonly my @arr => @values;
     Readonly    %has => (key => value, key => value, ...);
     Readonly my %has => (key => value, key => value, ...);
+    Readonly my $sca; # Implicit undef, readonly value
 
     # Alternate form (for Perls earlier than v5.8)
     Readonly    \$sca => $initial_value;
@@ -543,15 +561,17 @@ about reassigning Readonly variables.
 
 =item Readonly %h => {key => value, ...};
 
+=item Readonly $var;
+
 The C<Readonly> function is an alternate to the C<Scalar>, C<Array>, and
 C<Hash> functions. It has the advantage (if you consider it an advantage) of
 being one function. That may make your program look neater, if you're
 initializing a whole bunch of constants at once. You may or may not prefer
 this uniform style.
 
-It has the disadvantage of having a slightly different syntax for
-versions of Perl prior to 5.8.  For earlier versions, you must supply
-a backslash, because it requires a reference as the first parameter.
+It has the disadvantage of having a slightly different syntax for versions of
+Perl prior to 5.8.  For earlier versions, you must supply a backslash, because
+it requires a reference as the first parameter.
 
     Readonly \$var => $value;
     Readonly \@arr => (value, value, ...);
@@ -559,6 +579,10 @@ a backslash, because it requires a reference as the first parameter.
     Readonly \%h   => {key => value, ...};
 
 You may or may not consider this ugly.
+
+Note that you can create implicit undefined variables with this function like
+so C<Readonly my $var;> while a verbose undefined value must be passed to the
+standard C<Scalar>, C<Array>, and C<Hash> functions.
 
 =item Readonly::Scalar1 $var => $value;
 

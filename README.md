@@ -38,6 +38,7 @@ Readonly - Facility for creating read-only scalars, arrays, hashes
     Readonly my @arr => @values;
     Readonly    %has => (key => value, key => value, ...);
     Readonly my %has => (key => value, key => value, ...);
+    Readonly my $sca; # Implicit undef, readonly value
 
     # Alternate form (for Perls earlier than v5.8)
     Readonly    \$sca => $initial_value;
@@ -217,6 +218,7 @@ higher. Please see section entitled [Internals](#internals) for more.
 - Readonly @arr => (value, value, ...);
 - Readonly %h => (key => value, ...);
 - Readonly %h => {key => value, ...};
+- Readonly $var;
 
     The `Readonly` function is an alternate to the `Scalar`, `Array`, and
     `Hash` functions. It has the advantage (if you consider it an advantage) of
@@ -224,9 +226,9 @@ higher. Please see section entitled [Internals](#internals) for more.
     initializing a whole bunch of constants at once. You may or may not prefer
     this uniform style.
 
-    It has the disadvantage of having a slightly different syntax for
-    versions of Perl prior to 5.8.  For earlier versions, you must supply
-    a backslash, because it requires a reference as the first parameter.
+    It has the disadvantage of having a slightly different syntax for versions of
+    Perl prior to 5.8.  For earlier versions, you must supply a backslash, because
+    it requires a reference as the first parameter.
 
         Readonly \$var => $value;
         Readonly \@arr => (value, value, ...);
@@ -234,6 +236,10 @@ higher. Please see section entitled [Internals](#internals) for more.
         Readonly \%h   => {key => value, ...};
 
     You may or may not consider this ugly.
+
+    Note that you can create implicit undefined variables with this function like
+    so `Readonly my $var;` while a verbose undefined value must be passed to the
+    standard `Scalar`, `Array`, and `Hash` functions.
 
 - Readonly::Scalar1 $var => $value;
 - Readonly::Array1 @arr => (value, value, ...);
