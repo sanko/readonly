@@ -369,9 +369,6 @@ If email is better for you, [my address is mentioned below](#author) but I
 would rather have bugs sent through the issue tracker found at
 http://github.com/sanko/readonly/issues.
 
-Please check the TODO file included with this distribution in case your bug
-is already known (...I probably won't file bug reports to myself).
-
 # Acknowledgements
 
 Thanks to Slaven Rezic for the idea of one common function (Readonly) for all
