@@ -38,9 +38,76 @@ else {               # Modern perl doesn't need Readonly::XS
     $XSokay = 1;     # We're using the new built-ins so this is a white lie
 }
 
+# Undo setting readonly
+sub _SCALAR ($) {
+    my ($r_var) = @_;
+    warn $r_var;
+    if ($XSokay) {
+        Internals::SvREADONLY($r_var, 0) if is_sv_readonly($r_var);
+    }
+    else {
+        return if tied($r_var) !~ 'Readonly::Scalar';
+        my $r_scalar;
+        {
+            my $obj = tied $$r_var;
+            $r_scalar = $obj;
+        }
+        untie $r_var;
+        $r_var = $r_scalar;
+    }
+}
+
+sub _ARRAY (\@) {
+    my ($r_var) = @_;
+    return if tied(@$r_var) !~ 'Readonly::Array';
+    my $r_array;
+    {
+        my $obj = tied @$r_var;
+        $r_array = $obj;
+    }
+    untie @$r_var;
+    @$r_var = @$r_array;
+
+    # Recursively check child elements for references; clean if Readonly
+    foreach (@$r_var) {
+        my $_reftype = ref $_;
+        if ($_reftype eq 'SCALAR') { _SCALAR($_) }
+        elsif ($_reftype eq 'ARRAY') {
+            _ARRAY($_);
+        }
+        elsif ($_reftype eq 'HASH') {
+            _HASH($_);
+        }
+    }
+}
+
+sub _HASH (\%) {
+    my ($r_var) = @_;
+    return if tied(%$r_var) !~ 'Readonly::Hash';
+    my $r_hash;
+    {
+        my $obj = tied %$r_var;
+        $r_hash = $obj;
+    }
+    untie %$r_var;
+    %$r_var = %$r_hash;
+
+    # Recursively check child elements for references; clean if Readonly
+    foreach (values %$r_var) {
+        my $_reftype = ref $_;
+        if ($_reftype eq 'SCALAR') { _SCALAR($_) }
+        elsif ($_reftype eq 'ARRAY') {
+            _ARRAY(@$_);
+        }
+        elsif ($_reftype eq 'HASH') {
+            _HASH(%$_);
+        }
+    }
+}
+
 # Common error messages, or portions thereof
 use vars qw/$MODIFY $REASSIGN $ODDHASH/;
-$MODIFY   = 'Modification of a read-only value attempted';
+$MODIFY   = 'Modification of a read-only value attempted?!?!?!';
 $REASSIGN = 'Attempt to reassign a readonly';
 $ODDHASH  = 'May not store an odd number of values in a hash';
 
@@ -48,6 +115,11 @@ $ODDHASH  = 'May not store an odd number of values in a hash';
 # Read-only scalars
 # ----------------
 package Readonly::Scalar;
+
+sub STORABLE_freeze {
+    my ($self, $cloning) = @_;
+    Readonly::_SCALAR($$self) if $cloning;
+}
 
 sub TIESCALAR {
     my $whence
@@ -66,12 +138,18 @@ sub FETCH {
     my $self = shift;
     return $$self;
 }
-*STORE = *UNTIE = sub { Readonly::croak $Readonly::MODIFY};
+*STORE = sub { Readonly::croak $Readonly::MODIFY };
+*UNTIE = sub { Readonly::croak $Readonly::MODIFY if caller() ne 'Readonly' };
 
 # ----------------
 # Read-only arrays
 # ----------------
 package Readonly::Array;
+
+sub STORABLE_freeze {
+    my ($self, $cloning) = @_;
+    Readonly::_ARRAY(@$self) if $cloning;
+}
 
 sub TIEARRAY {
     my $whence
@@ -104,12 +182,18 @@ BEGIN {
     } if $] >= 5.006;    # couldn't do "exists" on arrays before then
 }
 *STORE = *STORESIZE = *EXTEND = *PUSH = *POP = *UNSHIFT = *SHIFT = *SPLICE
-    = *CLEAR = *UNTIE = sub { Readonly::croak $Readonly::MODIFY};
+    = *CLEAR = sub { Readonly::croak $Readonly::MODIFY};
+*UNTIE = sub { Readonly::croak $Readonly::MODIFY if caller() ne 'Readonly' };
 
 # ----------------
 # Read-only hashes
 # ----------------
 package Readonly::Hash;
+
+sub STORABLE_freeze {
+    my ($self, $cloning) = @_;
+    Readonly::_HASH(%$self) if $cloning;
+}
 
 sub TIEHASH {
     my $whence
@@ -145,7 +229,8 @@ sub NEXTKEY {
     my $self = shift;
     return scalar each %$self;
 }
-*STORE = *DELETE = *CLEAR = *UNTIE = sub { Readonly::croak $Readonly::MODIFY};
+*STORE = *DELETE = *CLEAR = sub { Readonly::croak $Readonly::MODIFY};
+*UNTIE = sub { Readonly::croak $Readonly::MODIFY if caller() ne 'Readonly'; };
 
 # ----------------------------------------------------------------
 # Main package, containing convenience functions (so callers won't
@@ -287,6 +372,23 @@ sub Hash (\%;@) {
         elsif (ref eq 'HASH')   { Hash my %v   => $_;  $_ = \%v }
     }
     return tie %$href, 'Readonly::Hash', @values;
+}
+
+sub Clone(\[$@%]) {
+    require Storable;
+    my $reftype = ref $_[0];
+    my $retval  = Storable::dclone($_[0]);
+    if ($reftype eq 'SCALAR') {
+        _SCALAR($retval);
+        return $$retval;
+    }
+    elsif ($reftype eq 'ARRAY') {
+        _ARRAY(@$retval);
+    }
+    elsif ($reftype eq 'HASH') {
+        _HASH(%$retval);
+    }
+    return $retval;
 }
 
 # Common entry-point for all supported data types
