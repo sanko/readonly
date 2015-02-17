@@ -714,7 +714,7 @@ ones. For example:
 
 =head1 Cloning
 
-When closing using L<Storable> or L<Clone> you will notice that the value stays
+When cloning using L<Storable> or L<Clone> you will notice that the value stays
 readonly, which is right. If you want to clone the value without copying
 readonly flag, use C<Clone> function:
 
