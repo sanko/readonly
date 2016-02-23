@@ -11,6 +11,10 @@ use constant ASSIGNMENT_ERR => qr/
 # Find the module (1 test)
 BEGIN { use_ok('Readonly'); }
 
+SKIP:
+{
+    skip 'Readonly $@% syntax is for perl 5.8 or later', 8  unless $] >= 5.008;
+
 eval 'Readonly my $simple = 2;';
 like $@ => ASSIGNMENT_ERR, 'Reject scalar initialization by assignment';
 
@@ -38,3 +42,4 @@ eval 'Readonly my %h; $h{key} = "v";';
 like $@ => qr/Modification of a read-only/,
     'Readonly empty hash is read only';
 
+}
