@@ -5,7 +5,7 @@ use strict;
 #use warnings;
 #no warnings 'uninitialized';
 package Readonly;
-our $VERSION = '2.00';
+our $VERSION = '2.01';
 $VERSION = eval $VERSION;
 
 # Autocroak (Thanks, MJD)
@@ -298,6 +298,11 @@ eval q{sub Readonly} . ($] < 5.008 ? '' : '(\[$@%]@)') . <<'SUB_READONLY';
         my $badtype = _is_badtype (ref tied ${$_[0]});
         croak "$REASSIGN $badtype" if $badtype;
         croak "Readonly scalar must have only one value" if @_ > 2;
+
+        # Because of problems with handling \$ prototypes declarations like
+        # Readonly my @a = ... and Readonly my %h = ... are also caught here
+        croak 'Invalid initialization by assignment'
+            if @_ == 1 && defined ${$_[0]};
 
         my $tieobj = eval {tie ${$_[0]}, 'Readonly::Scalar', $_[1]};
         # Tie may have failed because user tried to tie a constant, or we screwed up somehow.
