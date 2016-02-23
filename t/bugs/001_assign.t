@@ -3,7 +3,10 @@
 use strict;
 use Test::More tests => 9;
 
-use constant ASSIGNMENT_ERR => qr/Invalid initialization by assignment/;
+use constant ASSIGNMENT_ERR => qr/
+    \QInvalid initialization by assignment\E | # added by patch
+    \QType of arg 1 to Readonly::Readonly must be one of\E # pre v5.16
+/x;
 
 # Find the module (1 test)
 BEGIN { use_ok('Readonly'); }
