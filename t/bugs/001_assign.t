@@ -4,7 +4,7 @@ use strict;
 use Test::More tests => 9;
 
 use constant ASSIGNMENT_ERR => qr/
-    \QInvalid initialization by assignment\E | # added by patch
+    \QInvalid initialization by assignment\E | # Readonly assignment patch
     \QType of arg 1 to Readonly::Readonly must be one of\E # pre v5.16
 /x;
 
