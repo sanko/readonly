@@ -41,7 +41,6 @@ else {               # Modern perl doesn't need Readonly::XS
 # Undo setting readonly
 sub _SCALAR ($) {
     my ($r_var) = @_;
-    warn $r_var;
     if ($XSokay) {
         Internals::SvREADONLY($r_var, 0) if is_sv_readonly($r_var);
     }
@@ -107,7 +106,7 @@ sub _HASH (\%) {
 
 # Common error messages, or portions thereof
 use vars qw/$MODIFY $REASSIGN $ODDHASH/;
-$MODIFY   = 'Modification of a read-only value attempted?!?!?!';
+$MODIFY   = 'Modification of a read-only value attempted';
 $REASSIGN = 'Attempt to reassign a readonly';
 $ODDHASH  = 'May not store an odd number of values in a hash';
 
@@ -712,6 +711,17 @@ ones. For example:
     $deep[2]{APL}='Weird';  # error, since the hash is Readonly
 
 =back
+
+=head1 Cloning
+
+When cloning using L<Storable> or L<Clone> you will notice that the value stays
+readonly, which is right. If you want to clone the value without copying
+readonly flag, use C<Clone> function:
+
+    Readonly::Scalar my $scalar = 'string';
+    my $scalar_clone = Readonly::Clone $scalar_clone;
+
+    $scalar_clone .= 'foo'; # no error
 
 =head1 Examples
 
