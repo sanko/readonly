@@ -11,8 +11,12 @@ sub expected {
 
 # Find the module (1 test)
 BEGIN { use_ok('Readonly'); }
+SKIP:
+{
+    skip 'Readonly $@% syntax is for perl 5.8 or later', 1  unless $] >= 5.008;
 eval 'Readonly my $simple;';
 is $@ => '', 'Simple API allows for implicit undef values';
+}
 eval q'Readonly::Scalar my $scalar;';
 like $@ => qr[Not enough arguments for Readonly::Scalar],
     'Readonly::Scalar does not allow implicit undef values';
