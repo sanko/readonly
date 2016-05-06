@@ -720,13 +720,16 @@ ones. For example:
 =head1 Cloning
 
 When cloning using L<Storable> or L<Clone> you will notice that the value stays
-readonly, which is correct. If you want to clone the value without copying 
+readonly, which is correct. If you want to clone the value without copying the
 readonly flag, use the C<Clone> function:
 
     Readonly::Scalar my $scalar = 'string';
     my $scalar_clone = Readonly::Clone $scalar_clone;
 
     $scalar_clone .= 'foo'; # no error
+
+The new variable (C<$scalar_clone>) is a mutable clone of the original
+C<$scalar>.
 
 =head1 Examples
 

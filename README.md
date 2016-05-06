@@ -261,13 +261,16 @@ higher. Please see section entitled [Internals](#internals) for more.
 # Cloning
 
 When cloning using [Storable](https://metacpan.org/pod/Storable) or [Clone](https://metacpan.org/pod/Clone) you will notice that the value stays
-readonly, which is correct. If you want to clone the value without copying 
+readonly, which is correct. If you want to clone the value without copying the
 readonly flag, use the `Clone` function:
 
     Readonly::Scalar my $scalar = 'string';
     my $scalar_clone = Readonly::Clone $scalar_clone;
 
     $scalar_clone .= 'foo'; # no error
+
+The new variable (`$scalar_clone`) is a mutable clone of the original
+`$scalar`.
 
 # Examples
 
