@@ -720,8 +720,8 @@ ones. For example:
 =head1 Cloning
 
 When cloning using L<Storable> or L<Clone> you will notice that the value stays
-readonly, which is right. If you want to clone the value without copying
-readonly flag, use C<Clone> function:
+readonly, which is correct. If you want to clone the value without copying 
+readonly flag, use the C<Clone> function:
 
     Readonly::Scalar my $scalar = 'string';
     my $scalar_clone = Readonly::Clone $scalar_clone;
@@ -846,9 +846,6 @@ If email is better for you, L<my address is mentioned below|/"Author"> but I
 would rather have bugs sent through the issue tracker found at
 http://github.com/sanko/readonly/issues.
 
-Please check the TODO file included with this distribution in case your bug
-is already known (...I probably won't file bug reports to myself).
-
 =head1 Acknowledgements
 
 Thanks to Slaven Rezic for the idea of one common function (Readonly) for all
@@ -870,7 +867,7 @@ Original author: Eric J. Roode, roode@cpan.org
 
 =head1 License and Legal
 
-Copyright (C) 2013, 2014 by Sanko Robinson <sanko@cpan.org>
+Copyright (C) 2013-2016 by Sanko Robinson <sanko@cpan.org>
 
 Copyright (c) 2001-2004 by Eric J. Roode. All Rights Reserved.
 

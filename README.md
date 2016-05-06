@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/sanko/readonly.svg?branch=master)](https://travis-ci.org/sanko/readonly)
 # NAME
 
 Readonly - Facility for creating read-only scalars, arrays, hashes
@@ -257,6 +258,17 @@ higher. Please see section entitled [Internals](#internals) for more.
         $deep[1] = 7;           # error
         $deep[2]{APL}='Weird';  # error, since the hash is Readonly
 
+# Cloning
+
+When cloning using [Storable](https://metacpan.org/pod/Storable) or [Clone](https://metacpan.org/pod/Clone) you will notice that the value stays
+readonly, which is correct. If you want to clone the value without copying 
+readonly flag, use the `Clone` function:
+
+    Readonly::Scalar my $scalar = 'string';
+    my $scalar_clone = Readonly::Clone $scalar_clone;
+
+    $scalar_clone .= 'foo'; # no error
+
 # Examples
 
 These are a few very simple examples:
@@ -382,7 +394,7 @@ function work a lot smoother under perl 5.8+.
 
 # Author
 
-Sanko Robinson <sanko@cpan.org> - http://sankorobinson.com/
+Sanko Robinson &lt;sanko@cpan.org> - http://sankorobinson.com/
 
 CPAN ID: SANKO
 
@@ -390,7 +402,7 @@ Original author: Eric J. Roode, roode@cpan.org
 
 # License and Legal
 
-Copyright (C) 2013, 2014 by Sanko Robinson <sanko@cpan.org>
+Copyright (C) 2013-2016 by Sanko Robinson &lt;sanko@cpan.org>
 
 Copyright (c) 2001-2004 by Eric J. Roode. All Rights Reserved.
 
