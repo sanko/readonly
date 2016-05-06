@@ -41,11 +41,8 @@
          }
       },
       "runtime" : {
-         "recommends" : {
-            "perl" : "v5.20.0"
-         },
          "requires" : {
-            "perl" : "v5.6.0"
+            "perl" : "5.005"
          }
       },
       "test" : {
