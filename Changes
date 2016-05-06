@@ -1,6 +1,8 @@
 Revision history for Perl extension Readonly.
 
 {{$NEXT}}
+
+2.03 2016-05-06T22:27:44Z
 	- Rewording some documentation
 	- No longer require an explicit version of perl in META.json or cpanfile
 
