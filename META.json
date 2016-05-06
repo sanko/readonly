@@ -1,0 +1,77 @@
+{
+   "abstract" : "Facility for creating read-only scalars, arrays, hashes",
+   "author" : [
+      "Sanko Robinson <sanko@cpan.org> - http://sankorobinson.com/"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Minilla/v3.0.1, CPAN::Meta::Converter version 2.150005",
+   "license" : [
+      "artistic_2"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Readonly",
+   "no_index" : {
+      "directory" : [
+         "t",
+         "xt",
+         "inc",
+         "share",
+         "eg",
+         "examples",
+         "author",
+         "builder"
+      ]
+   },
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "Module::Build::Tiny" : "0.035"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Test::CPAN::Meta" : "0",
+            "Test::MinimumVersion::Fast" : "0.04",
+            "Test::PAUSE::Permissions" : "0.04",
+            "Test::Pod" : "1.41",
+            "Test::Spellunker" : "v0.2.7"
+         }
+      },
+      "runtime" : {
+         "recommends" : {
+            "perl" : "v5.20.0"
+         },
+         "requires" : {
+            "perl" : "v5.6.0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0"
+         }
+      }
+   },
+   "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/sanko/readonly/issues"
+      },
+      "homepage" : "https://github.com/sanko/readonly",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/sanko/readonly.git",
+         "web" : "https://github.com/sanko/readonly"
+      }
+   },
+   "version" : "2.01",
+   "x_contributors" : [
+      "David Steinbrunner <dsteinbrunner@pobox.com>",
+      "Peter Valdemar Mørch <pm@capmon.dk>",
+      "vti <viacheslav.t@gmail.com>",
+      "Ronald Schmidt <ronaldxs@software-path.com>"
+   ],
+   "x_serialization_backend" : "JSON::PP version 2.27300"
+}

@@ -6,13 +6,11 @@ inc/
 Build
 !Build/
 Build.bat
-Build.PL
 .last_cover_stats
 Makefile
 Makefile.old
 MANIFEST.bak
 META.yml
-META.json
 MYMETA.yml
 MYMETA.json
 nytprof.out
