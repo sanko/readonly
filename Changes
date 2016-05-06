@@ -1,6 +1,8 @@
 Revision history for Perl extension Readonly.
 
 {{$NEXT}}
+
+2.02 2016-05-06T21:56:10Z
 	- Create mutable clones of readonly structures with Readonly::Clone
 		- Still not convinced this is useful but... fixes #13
 	- Minor typo patch from Gregor Herrmann <gregoa@debian.org> fixes #21
