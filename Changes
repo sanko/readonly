@@ -1,6 +1,9 @@
 Revision history for Perl extension Readonly.
 
 {{$NEXT}}
+	- Minor typo patch from Gregor Herrmann <gregoa@debian.org> fixes #21
+
+2.01 2016-02-24T16:01:12Z
     - Disallow initialization of Readonly variables by assignment
       allowed by Perl prototype changes in v5.16.  Assignment initialization
       of scalars sets scalar variables to undef and lists and hashes

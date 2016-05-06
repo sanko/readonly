@@ -338,7 +338,7 @@ const-related modules that have cropped up since Readonly was released in
 To 'fix' this, Readonly::XS was written. If installed, Readonly::XS used the
 internal methods `SvREADONLY` and `SvREADONLY_on` to lock simple scalars. On
 the surface, everything was peachy but things weren't the same behind the
-scenes. In edge cases, code perfromed very differently if Readonly::XS was
+scenes. In edge cases, code performed very differently if Readonly::XS was
 installed and because it wasn't a required dependency in most code, it made
 downstream bugs very hard to track.
 
