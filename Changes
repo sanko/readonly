@@ -2,6 +2,7 @@ Revision history for Perl extension Readonly.
 
 {{$NEXT}}
 	- Rewording some documentation
+	- No longer require an explicit version of perl in META.json or cpanfile
 
 2.02 2016-05-06T21:56:10Z
 	- Create mutable clones of readonly structures with Readonly::Clone
