@@ -18,6 +18,10 @@ sub croak {
 # These functions may be overridden by Readonly::XS, if installed.
 use vars qw/$XSokay/;    # Set to true in Readonly::XS, if available
 
+# Predeclare the following, so we can use them recursively
+sub _ARRAY (\@);
+sub _HASH (\%);
+
 # For perl 5.8.x or higher
 # These functions are exposed in perl 5.8.x (Thanks, Leon!)
 # They may be overridden by Readonly::XS, if installed on old perl versions
@@ -27,7 +31,7 @@ if ($] < 5.008) {    # 'Classic' perl
         = sub ($) { die "make_sv_readonly called but not overridden" };
 
     # See if we can use the XS stuff.
-    $Readonly::XS::MAGIC_COOKIE
+    $Readonly::XS::MAGIC_COOKIE = $Readonly::XS::MAGIC_COOKIE
         = "Do NOT use or require Readonly::XS unless you're me.";
     eval 'use Readonly::XS';
 }
@@ -72,10 +76,10 @@ sub _ARRAY (\@) {
         my $_reftype = ref $_;
         if ($_reftype eq 'SCALAR') { _SCALAR($_) }
         elsif ($_reftype eq 'ARRAY') {
-            _ARRAY($_);
+            _ARRAY(@$_);
         }
         elsif ($_reftype eq 'HASH') {
-            _HASH($_);
+            _HASH(%$_);
         }
     }
 }
@@ -137,8 +141,9 @@ sub FETCH {
     my $self = shift;
     return $$self;
 }
-*STORE = sub { Readonly::croak $Readonly::MODIFY };
-*UNTIE = sub { Readonly::croak $Readonly::MODIFY if caller() ne 'Readonly' };
+*STORE = *STORE = sub { Readonly::croak $Readonly::MODIFY };
+*UNTIE = *UNTIE
+    = sub { Readonly::croak $Readonly::MODIFY if caller() ne 'Readonly' };
 
 # ----------------
 # Read-only arrays
@@ -181,8 +186,10 @@ BEGIN {
     } if $] >= 5.006;    # couldn't do "exists" on arrays before then
 }
 *STORE = *STORESIZE = *EXTEND = *PUSH = *POP = *UNSHIFT = *SHIFT = *SPLICE
-    = *CLEAR = sub { Readonly::croak $Readonly::MODIFY};
-*UNTIE = sub { Readonly::croak $Readonly::MODIFY if caller() ne 'Readonly' };
+    = *CLEAR = *STORE = *STORESIZE = *EXTEND = *PUSH = *POP = *UNSHIFT
+    = *SHIFT = *SPLICE = *CLEAR = sub { Readonly::croak $Readonly::MODIFY};
+*UNTIE = *UNTIE
+    = sub { Readonly::croak $Readonly::MODIFY if caller() ne 'Readonly' };
 
 # ----------------
 # Read-only hashes
@@ -228,8 +235,10 @@ sub NEXTKEY {
     my $self = shift;
     return scalar each %$self;
 }
-*STORE = *DELETE = *CLEAR = sub { Readonly::croak $Readonly::MODIFY};
-*UNTIE = sub { Readonly::croak $Readonly::MODIFY if caller() ne 'Readonly'; };
+*STORE = *DELETE = *CLEAR = *STORE = *DELETE = *CLEAR
+    = sub { Readonly::croak $Readonly::MODIFY};
+*UNTIE = *UNTIE
+    = sub { Readonly::croak $Readonly::MODIFY if caller() ne 'Readonly'; };
 
 # ----------------------------------------------------------------
 # Main package, containing convenience functions (so callers won't
