@@ -1,6 +1,8 @@
 Revision history for Perl extension Readonly.
 
 {{$NEXT}}
+
+2.04 2016-05-07T15:38:37Z
     - Quiet compile time warnings about function prototypes and vars being
       used only once
 
