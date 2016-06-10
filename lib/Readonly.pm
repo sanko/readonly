@@ -394,8 +394,6 @@ sub Clone(\[$@%]) {
         return $$retval;
     }
     elsif ($reftype eq 'ARRAY') {
-        use Data::Dump;
-        ddx @$retval;
         _ARRAY(@$retval);
     }
     elsif ($reftype eq 'HASH') {
