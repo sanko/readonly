@@ -1,6 +1,8 @@
 Revision history for Perl extension Readonly.
 
 {{$NEXT}}
+
+2.05 2016-06-10T17:03:28Z
     - Fix deref when using the stupid and utterly unnecessary Readonly::Clone
 
 2.04 2016-05-07T15:38:37Z

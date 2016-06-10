@@ -5,7 +5,7 @@ use strict;
 #use warnings;
 #no warnings 'uninitialized';
 package Readonly;
-our $VERSION = '2.04';
+our $VERSION = '2.05';
 $VERSION = eval $VERSION;
 
 # Autocroak (Thanks, MJD)
