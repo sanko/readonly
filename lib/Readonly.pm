@@ -62,6 +62,7 @@ sub _SCALAR ($) {
 
 sub _ARRAY (\@) {
     my ($r_var) = @_;
+    return if !tied(@$r_var);
     return if tied(@$r_var) !~ 'Readonly::Array';
     my $r_array;
     {
@@ -86,6 +87,7 @@ sub _ARRAY (\@) {
 
 sub _HASH (\%) {
     my ($r_var) = @_;
+    return if !tied(%$r_var);
     return if tied(%$r_var) !~ 'Readonly::Hash';
     my $r_hash;
     {
@@ -384,17 +386,21 @@ sub Hash (\%;@) {
 
 sub Clone(\[$@%]) {
     require Storable;
-    my $reftype = ref $_[0];
-    my $retval  = Storable::dclone($_[0]);
+    my $retval = Storable::dclone($_[0]);
+    $retval = $$retval if ref $retval eq 'REF';
+    my $reftype = ref $retval;
     if ($reftype eq 'SCALAR') {
         _SCALAR($retval);
         return $$retval;
     }
     elsif ($reftype eq 'ARRAY') {
+        use Data::Dump;
+        ddx @$retval;
         _ARRAY(@$retval);
     }
     elsif ($reftype eq 'HASH') {
         _HASH(%$retval);
+        return %$retval if wantarray;
     }
     return $retval;
 }
