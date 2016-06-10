@@ -512,13 +512,34 @@ debugging tool for catching updates to variables that should not be changed.
 
 Readonly has the ability to create both deep and shallow readonly variables.
 
-If any of the values you pass to C<Scalar>, C<Array>, C<Hash>, or the standard
-C<Readonly> are references, then those functions recurse over the data
-structures, marking everything as Readonly. The entire structure is
-nonmodifiable. This is normally what you want.
+If you pass a C<$ref>, an C<@array> or a C<%hash> to corresponding functions
+C<::Scalar()>, C<::Array()> and C<::Hash()>, then those functions recurse over
+the data structure, marking everything as readonly. The entire structure is
+then non-modifiable. This is normally what you want.
 
-If you want only the top level to be Readonly, use the alternate (and poorly
-named) C<Scalar1>, C<Array1>, and C<Hash1> functions.
+If you want only the top level to be readonly, use the alternate (and poorly
+named) C<::Scalar1()>, C<::Array1()>, and C<::Hash1()> functions.
+
+Plain C<Readonly()> creates what the original author calls a "shallow"
+readonly variable, which is great if you don't plan to use it on anything but
+only one dimensional scalar values.
+
+C<Readonly::Scalar()> makes the variable 'deeply' readonly, so the following
+snippet kills over as you expect:
+
+ use Readonly;
+
+ Readonly::Scalar my $ref => { 1 => 'a' };
+ $ref->{1} = 'b';
+ $ref->{2} = 'b';
+
+While the following snippet does B<not> make your structure 'deeply' readonly:
+
+ use Readonly;
+
+ Readonly my $ref => { 1 => 'a' };
+ $ref->{1} = 'b';
+ $ref->{2} = 'b';
 
 =head1
 
