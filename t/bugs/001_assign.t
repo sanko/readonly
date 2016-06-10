@@ -1,7 +1,7 @@
 #!perl -I../../lib
 # Verify the Readonly function rejects initialization by assignment
 use strict;
-use warnings;
+use warnings; no warnings 'misc';
 use Test::More;
 use Readonly;
 #

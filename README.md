@@ -59,13 +59,34 @@ debugging tool for catching updates to variables that should not be changed.
 
 Readonly has the ability to create both deep and shallow readonly variables.
 
-If any of the values you pass to `Scalar`, `Array`, `Hash`, or the standard
-`Readonly` are references, then those functions recurse over the data
-structures, marking everything as Readonly. The entire structure is
-nonmodifiable. This is normally what you want.
+If you pass a `$ref`, an `@array` or a `%hash` to corresponding functions
+`::Scalar()`, `::Array()` and `::Hash()`, then those functions recurse over
+the data structure, marking everything as readonly. The entire structure is
+then non-modifiable. This is normally what you want.
 
-If you want only the top level to be Readonly, use the alternate (and poorly
-named) `Scalar1`, `Array1`, and `Hash1` functions.
+If you want only the top level to be readonly, use the alternate (and poorly
+named) `::Scalar1()`, `::Array1()`, and `::Hash1()` functions.
+
+Plain `Readonly()` creates what the original author calls a "shallow"
+readonly variable, which is great if you don't plan to use it on anything but
+only one dimensional scalar values.
+
+`Readonly::Scalar()` makes the variable 'deeply' readonly, so the following
+snippet kills over as you expect:
+
+    use Readonly;
+
+    Readonly::Scalar my $ref => { 1 => 'a' };
+    $ref->{1} = 'b';
+    $ref->{2} = 'b';
+
+While the following snippet does **not** make your structure 'deeply' readonly:
+
+    use Readonly;
+
+    Readonly my $ref => { 1 => 'a' };
+    $ref->{1} = 'b';
+    $ref->{2} = 'b';
 
 # 
 
@@ -264,10 +285,11 @@ When cloning using [Storable](https://metacpan.org/pod/Storable) or [Clone](http
 readonly, which is correct. If you want to clone the value without copying the
 readonly flag, use the `Clone` function:
 
-    Readonly::Scalar my $scalar = 'string';
-    my $scalar_clone = Readonly::Clone $scalar_clone;
-
-    $scalar_clone .= 'foo'; # no error
+    Readonly::Scalar my $scalar => {qw[this that]};
+    # $scalar->{'eh'} = 'foo'; # Modification of a read-only value attempted
+    my $scalar_clone = Readonly::Clone $scalar;
+    $scalar_clone->{'eh'} = 'foo';
+    # $scalar_clone is now {this => 'that', eh => 'foo'};
 
 The new variable (`$scalar_clone`) is a mutable clone of the original
 `$scalar`.

@@ -1,6 +1,7 @@
 Revision history for Perl extension Readonly.
 
 {{$NEXT}}
+    - Fix deref when using the stupid and utterly unnecessary Readonly::Clone
 
 2.04 2016-05-07T15:38:37Z
     - Quiet compile time warnings about function prototypes and vars being
