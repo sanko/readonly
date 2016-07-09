@@ -387,8 +387,12 @@ sub Hash (\%;@) {
 sub Clone(\[$@%]) {
     require Storable;
     my $retval = Storable::dclone($_[0]);
+    use Data::Dump;
+    #ddx $retval;
+    warn ref $retval;
     $retval = $$retval if ref $retval eq 'REF';
     my $reftype = ref $retval;
+    warn $reftype;
     if ($reftype eq 'SCALAR') {
         _SCALAR($retval);
         return $$retval;
