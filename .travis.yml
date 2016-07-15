@@ -1,37 +1,31 @@
 language: perl
-env:
-  - RO_IMPLEMENTATION=PP
-  - RO_IMPLEMENTATION=XS
+sudo: false
 perl:
   - "5.6.2"
-  - "5.8.1"
-  - "5.8.9"
-  - "5.10.0"
-  - "5.10.1"
+  - "5.8"
+  - "5.8.7"
+  - "5.10"
   - "5.12"
   - "5.14"
   - "5.16"
   - "5.18"
   - "5.20"
-  - "blead"
+  - "5.22"
 matrix:
   include:
-    - perl: 5.18.2
-      env: COVERAGE=1 RO_IMPLEMENTATION=PP
+    - perl: 5.8.1
+      env: AUTHOR_TESTING=0
+    - perl: 5.18
+      env: COVERAGE=codecov
+  allow_failures:
+    - perl: blead
+    - perl: 5.6.2
+      env: AUTHOR_TESTING=0
+sudo: false
 before_install:
-  - git clone git://github.com/haarg/perl-travis-helper
-  - source perl-travis-helper/init
+  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+  - source ~/travis-perl-helpers/init
   - build-perl
   - perl -V
   - build-dist
   - cd $BUILD_DIR
-install:
-  - cpan-install --toolchain
-  - cpan-install --deps
-  - cpan-install --coverage
-before_script:
-  - coverage-setup
-script:
-  - prove -l $(test-dirs)
-after_success:
-  - coverage-report

@@ -5,13 +5,16 @@ use warnings;
 our $VERSION = "2.06";
 use Carp;
 use Exporter;
-use vars qw/@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS/;
+use vars qw/@ISA @EXPORT @EXPORT_OK/;
 push @ISA,       'Exporter';
 push @EXPORT,    qw/Readonly/;
 push @EXPORT_OK, qw/Scalar Array Hash/;
 #
 sub Array(\@;@);
-
+sub Hash(\%;@);
+sub Scalar($$);
+sub Readonly(\[%@$]$);
+#
 sub Array(\@;@) {
     @{$_[0]}
         = ref $_[1] eq 'ARRAY'
@@ -19,7 +22,6 @@ sub Array(\@;@) {
         && ref $_[1] eq 'ARRAY' ? @{$_[1]} : @_[1 .. $#_];
     _readonly($_[0]);
 }
-sub Hash(\%;@);
 
 sub Hash(\%;@) {
     Carp::croak 'Odd number of elements in hash assignment'
@@ -27,7 +29,6 @@ sub Hash(\%;@) {
     %{$_[0]} = ref $_[1] eq 'HASH' && $#_ == 1 ? %{$_[1]} : @_[1 .. $#_];
     _readonly($_[0]);
 }
-sub Scalar($$);
 
 sub Scalar($$) {
     my $ref = ref $_[1];
@@ -37,7 +38,6 @@ sub Scalar($$) {
     _readonly($_[0]);
     Internals::SvREADONLY($_[0], 1);
 }
-sub Readonly(\[%@$]$);
 
 sub Readonly(\[%@$]$) {
     my $type = ref $_[0];
