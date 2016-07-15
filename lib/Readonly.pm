@@ -41,9 +41,10 @@ sub Readonly(\[%@$]$);
 
 sub Readonly(\[%@$]$) {
     my $type = ref $_[0];
-    return Scalar(${$_[0]}, $_[1] // ()) if $type eq 'SCALAR' or $type eq '';
-    return Hash(%{$_[0]}, $_[1] // ()) if $type eq 'HASH';
-    return Array(@{$_[0]}, $_[1] // []) if $type eq 'ARRAY';
+    return Scalar(${$_[0]}, defined $_[1] ? $_[1] : ())
+        if $type eq 'SCALAR' or $type eq '';
+    return Hash(%{$_[0]}, defined $_[1] ? $_[1] : ()) if $type eq 'HASH';
+    return Array(@{$_[0]}, defined $_[1] ? $_[1] : []) if $type eq 'ARRAY';
 }
 
 sub _readonly {
