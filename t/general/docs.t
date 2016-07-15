@@ -1,10 +1,8 @@
 #!perl -I../../lib
 # Examples from the docs -- make sure they work!
 use strict;
-use Test::More tests => 22;
-
-# Find the module (1 test)
-BEGIN { use_ok('Readonly'); }
+use Test::More;
+use Readonly;
 
 sub expected {
     my $line = shift;
@@ -41,26 +39,17 @@ is $@ => '', 'Empty hash 1';
 eval { Readonly::Hash %a4 };
 is $@ => '', 'Empty hash 2';
 eval { Readonly::Hash %a5 => (key1 => "value1", "value2") };
-like $@, qr/odd number of values/, 'Odd number of values';
+like $@, qr/Odd number of elements in hash assignment/, 'Odd number of values';
 
-# Shallow vs deep (8 tests)
-use vars qw/@shal @deep/;
-eval {
-    Readonly::Array1 @shal =>
-        (1, 2, {perl => "Rules", java => "Bites"}, 4, 5);
-};
+use vars qw/@deep/;
 eval {
     Readonly::Array @deep => (1, 2, {perl => "Rules", java => "Bites"}, 4, 5);
 };
-eval { $shal[1] = 7 };
-is $@ => expected(__LINE__- 1), 'deep test 1';
-is $shal[1] => 2, 'deep test 1 confirm';
-eval { $shal[2]{APL} = "Weird" };
-is $@            => '',      'deep test 2';
-is $shal[2]{APL} => "Weird", 'deep test 2 confirm';
 eval { $deep[1] = 7 };
 is $@ => expected(__LINE__- 1), 'deep test 3';
 is $deep[1] => 2, 'deep test 3 confirm';
 eval { $deep[2]{APL} = "Weird" };
-is $@ => expected(__LINE__- 1), 'deep test 4';
+like $@ => qr[Attempt to access disallowed key 'APL' in a restricted hash], 'deep test 4';
 ok !exists($deep[2]{APL}), 'deep test 4 confirm';
+#
+done_testing;

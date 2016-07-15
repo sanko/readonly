@@ -3,10 +3,8 @@
 # Readonly scalar tests
 
 use strict;
-use Test::More tests => 12;
-
-# Find the module (1 test)
-BEGIN {use_ok('Readonly'); }
+use Test::More;
+use Readonly;
 
 sub expected
 {
@@ -38,11 +36,5 @@ ok !defined $ms2, 'Fetch undef lexical';
 eval {$s1 = 7};
 is $@ => expected(__LINE__-1), 'Error setting global';
 is $s1 => 13, 'Readonly global value unchanged';
-
-# untie (1 test)
-SKIP:{
-	skip "Can't catch 'untie' until perl 5.6", 1 if $] < 5.006;
-    skip "Scalars not tied: XS in use", 1 if $Readonly::XSokay;
-	eval {untie $ms1};
-	is $@ => expected(__LINE__-1), 'Untie';
-	}
+#
+done_testing;

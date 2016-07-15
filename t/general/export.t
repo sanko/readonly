@@ -1,7 +1,12 @@
 #!perl -I../../lib
-# Readonly hash tests
 use strict;
-use Test::More tests => 1;
-
-# Find the module (1 test)
-BEGIN { use_ok('Readonly', qw/Scalar Scalar1 Array Array1 Hash Hash1/); }
+use Test::More;
+#
+use_ok('Readonly', qw/Readonly Scalar Array Hash/);
+#
+can_ok 'main', 'Readonly';
+can_ok 'main', 'Scalar';
+can_ok 'main', 'Array';
+can_ok 'main', 'Hash';
+#
+done_testing;

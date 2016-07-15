@@ -419,7 +419,7 @@ function work a lot smoother under perl 5.8+.
 
 # Author
 
-Sanko Robinson &lt;sanko@cpan.org> - http://sankorobinson.com/
+Sanko Robinson <sanko@cpan.org> - http://sankorobinson.com/
 
 CPAN ID: SANKO
 
@@ -427,7 +427,7 @@ Original author: Eric J. Roode, roode@cpan.org
 
 # License and Legal
 
-Copyright (C) 2013-2016 by Sanko Robinson &lt;sanko@cpan.org>
+Copyright (C) 2013-2016 by Sanko Robinson <sanko@cpan.org>
 
 Copyright (c) 2001-2004 by Eric J. Roode. All Rights Reserved.
 
