@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/sanko/readonly.svg?branch=master)](https://travis-ci.org/sanko/readonly)
 # NAME
 
-Readonly - Facility for creating read-only scalars, arrays, hashes
+Readonly - Faster facility for creating read-only scalars, arrays, hashes
 
 # Synopsis
 

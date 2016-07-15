@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More;
-use Readonly;
+use ReadonlyX;
 
 sub expected {
     my $line = shift;

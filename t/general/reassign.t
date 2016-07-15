@@ -4,7 +4,7 @@
 
 use strict;
 use Test::More;
-use Readonly;
+use ReadonlyX;
 
 use vars qw($s1 @a1 %h1 $s2 @a2 %h2);
 

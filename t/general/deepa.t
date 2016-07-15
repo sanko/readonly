@@ -2,7 +2,7 @@
 # Test Array vs Array1 functionality
 use strict;
 use Test::More;
-use Readonly;
+use ReadonlyX;
 
 sub expected {
     my $line = shift;

@@ -1,8 +1,10 @@
-package Readonly;
+package ReadonlyX;
 use 5.005;
 use strict;
 use warnings;
 our $VERSION = "2.06";
+BEGIN {*ReadonlyX:: = *Readonly::}
+package Readonly;
 use Carp;
 use Exporter;
 use vars qw/@ISA @EXPORT @EXPORT_OK/;
@@ -107,10 +109,16 @@ sub Clone(\[$@%]) {
         : $retval;
 }
 1;
-
+package ReadonlyX;
+use 5.005;
+use strict;
+use warnings;
+our $VERSION = "2.06";
+BEGIN {*ReadonlyX:: = *Readonly::}
+1;
 =head1 NAME
 
-Readonly - Facility for creating read-only scalars, arrays, hashes
+Readonly - Faster facility for creating read-only scalars, arrays, hashes
 
 =head1 Synopsis
 

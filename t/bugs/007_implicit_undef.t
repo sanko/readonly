@@ -2,7 +2,7 @@
 # No implicit undef!
 use strict;
 use Test::More;
-use Readonly;
+use ReadonlyX;
 
 eval q'Readonly::Scalar my $scalar;';
 like $@ => qr[Not enough arguments for Readonly::Scalar],

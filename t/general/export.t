@@ -2,7 +2,7 @@
 use strict;
 use Test::More;
 #
-use_ok('Readonly', qw/Readonly Scalar Array Hash/);
+use_ok('ReadonlyX', qw/Readonly Scalar Array Hash/);
 #
 can_ok 'main', 'Readonly';
 can_ok 'main', 'Scalar';

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More;
 use lib '../../lib';
-use Readonly;
+use ReadonlyX;
 
     #
     Readonly::Scalar my $scalar => 13;

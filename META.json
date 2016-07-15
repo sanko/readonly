@@ -1,5 +1,5 @@
 {
-   "abstract" : "Facility for creating read-only scalars, arrays, hashes",
+   "abstract" : "Faster facility for creating read-only scalars, arrays, hashes",
    "author" : [
       "Sanko Robinson <sanko@cpan.org> - http://sankorobinson.com/"
    ],
@@ -12,7 +12,7 @@
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
       "version" : "2"
    },
-   "name" : "Readonly",
+   "name" : "ReadonlyX",
    "no_index" : {
       "directory" : [
          "t",

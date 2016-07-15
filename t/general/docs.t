@@ -2,7 +2,7 @@
 # Examples from the docs -- make sure they work!
 use strict;
 use Test::More;
-use Readonly;
+use ReadonlyX;
 
 sub expected {
     my $line = shift;
