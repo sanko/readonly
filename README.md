@@ -250,6 +250,9 @@ If email is better for you, [my address is mentioned below](#author) but I
 would rather have bugs sent through the issue tracker found at
 http://github.com/sanko/readonly/issues.
 
+ReadonlyX can be found is the branch of Readonly found here:
+https://github.com/sanko/readonly/tree/ReadonlyX
+
 # Author
 
 Sanko Robinson <sanko@cpan.org> - http://sankorobinson.com/

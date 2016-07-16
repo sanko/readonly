@@ -1,11 +1,11 @@
 package ReadonlyX;
-use 5.005;
+use 5.008;
 use strict;
 use warnings;
-our $VERSION = "2.06";
+our $VERSION = "1.00";
 BEGIN { *ReadonlyX:: = *Readonly:: }
 
-package Readonly;
+package Readonly;    # I wish...
 use Carp;
 use Exporter;
 use vars qw/@ISA @EXPORT @EXPORT_OK/;
@@ -115,7 +115,7 @@ package ReadonlyX;
 use 5.005;
 use strict;
 use warnings;
-our $VERSION = "2.06";
+our $VERSION = "1.00";
 BEGIN { *ReadonlyX:: = *Readonly:: }
 1;
 

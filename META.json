@@ -42,7 +42,7 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.005"
+            "perl" : "5.008"
          }
       },
       "test" : {
@@ -64,7 +64,7 @@
          "web" : "https://github.com/sanko/readonly"
       }
    },
-   "version" : "2.06",
+   "version" : "1.00",
    "x_contributors" : [
       "David Steinbrunner <dsteinbrunner@pobox.com>",
       "Peter Valdemar Mørch <pm@capmon.dk>",
