@@ -82,7 +82,7 @@ sub _readonly {
             if $refref eq 'HASH';
         return Internals::SvREADONLY(${$_[0]}, $onoff);
     }
-    warn 'We do not know what to do with ' . $type;
+    Carp::carp 'We do not know what to do with ' . $type;
 }
 
 sub Clone(\[$@%]) {
@@ -97,17 +97,10 @@ sub Clone(\[$@%]) {
               ),
               0
     );
-    return $type eq 'SCALAR' ?
-        $$retval
-        : $type eq 'ARRAY' ?
-        wantarray ?
-        @$retval
-        : $retval
-        : $type eq 'HASH' ?
-        wantarray ?
-        %$retval
-        : $retval
-        : $retval;
+    return ($type eq 'SCALAR' ?  $$retval
+         : $type eq 'ARRAY' ?  wantarray ? @$retval    : $retval
+         : $type eq 'HASH' ?  wantarray ?  %$retval    : $retval
+         : $retval;
 }
 1;
 
@@ -170,7 +163,7 @@ L<ReadonlyX vs. Readonly> for more.
 
 =head1 Functions
 
-All of these functions are imported into your package by default.
+All of these functions can be imported into your package by name.
 
 =head2 Readonly::Scalar
 
@@ -182,13 +175,13 @@ Creates a non-modifiable scalar and assigns a value of to it. Thereafter, its
 value may not be changed. Any attempt to modify the value will cause your
 program to die.
 
-If C<$value> is a reference to a scalar, array, or hash, then this function
-will mark the scalar, array, or hash it points to as being readonly as well,
-and it will recursively traverse the structure, marking the whole thing as
-readonly.
+If the given value is a reference to a scalar, array, or hash, then this
+function will mark the scalar, array, or hash it points to as being readonly
+as well, and it will recursively traverse the structure, marking the whole
+thing as readonly.
 
-If $var is already a Readonly variable, the program will die with an error
-about reassigning Readonly variables.
+If the variable is already readonly, the program will die with an error about
+reassigning readonly variables.
 
 =head2 Readonly::Array
 
@@ -204,8 +197,8 @@ this function will mark the scalar, array, or hash it points to as being
 Readonly as well, and it will recursively traverse the structure, marking the
 whole thing as Readonly.
 
-If the array is already Readonly, the program will die with an error about
-reassigning Readonly variables.
+If the variable is already readonly, the program will die with an error about
+reassigning readonly variables.
 
 =head2 Readonly::Hash
 
@@ -226,8 +219,8 @@ function will mark the scalar, array, or hash it points to as being Readonly
 as well, and it will recursively traverse the structure, marking the whole
 thing as Readonly.
 
-If the hash is already Readonly, the program will die with an error about
-reassigning Readonly variables.
+If the variable is already readonly, the program will die with an error about
+reassigning readonly variables.
 
 =head2 Readonly::Clone
 
@@ -252,13 +245,17 @@ Here are a few very simple examples again to get you started:
 
 =head2 Scalars
 
-A plain old read-only value
+A plain old read-only value:
 
     Readonly::Scalar $a => "A string value";
 
 The value need not be a compile-time constant:
 
     Readonly::Scalar $a => $computed_value;
+
+Need an undef constant? Okay:
+
+    Readonly::Scalar $a;
 
 =head2 Arrays/Lists
 
@@ -345,21 +342,24 @@ In short, unlike Readonly, ReadonlyX...
 
 =over
 
-=item ...does not use slow C<tie(...)> magic or eval. There should be almost no speed penalty
+=item ...does not use slow C<tie(...)> magic or eval. There shouldn't be a
+        speed penalty after making the structure immutable
 
 =item ...does not strive to work on perl versions I can't even find a working
         build of to test against
 
 =item ...has a single, clean API
 
-=item Does the right thing when it comes to deep vs. shallow structures
+=item ...does the right thing when it comes to deep vs. shallow structures
 
-=item Allows implicit undef values for scalars (Readonly inconsistantly allows
-        this for hashes and arrays but not scalars)
+=item ...allows implicit undef values for scalars (Readonly inconsistantly
+        allows this for hashes and arrays but not scalars)
 
-=item ...a lot more I can't think of right now but will add when they come to me
+=item ...a lot more I can't think of right now but will add when they come to
+        me
 
-=item ...is around 100 lines instead of 460ish so maintaining it will be a breeze
+=item ...is around 100 lines instead of 460ish so maintaining it will be a
+        breeze
 
 =back
 
