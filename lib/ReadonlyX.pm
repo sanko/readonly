@@ -2,10 +2,10 @@ package ReadonlyX;
 use 5.008;
 use strict;
 use warnings;
-our $VERSION = "1.00";
+our $VERSION = "1.01";
 BEGIN { *ReadonlyX:: = *Readonly:: }
-
-package Readonly;    # I wish...
+package          # hide from PAUSE
+    Readonly;    # I wish...
 use Carp;
 use Exporter;
 use vars qw/@ISA @EXPORT @EXPORT_OK/;
@@ -109,14 +109,6 @@ sub Clone(\[$@%]) {
         : $retval
         : $retval;
 }
-1;
-
-package ReadonlyX;
-use 5.005;
-use strict;
-use warnings;
-our $VERSION = "1.00";
-BEGIN { *ReadonlyX:: = *Readonly:: }
 1;
 
 =head1 NAME

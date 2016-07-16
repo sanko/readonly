@@ -2,6 +2,10 @@ Revision history for Perl extension ReadonlyX.
 
 {{$NEXT}}
 
+1.01 2016-07-16T01:41:17Z
+
+    - Hide fake Readonly package from PAUSE (I hope)
+
 1.00 2016-07-16T01:29:19Z
 
     - Brand spankin' new!
