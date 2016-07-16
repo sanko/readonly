@@ -50,15 +50,18 @@ ReadonlyX - Faster facility for creating read-only scalars, arrays, hashes
 
 # Description
 
-This is a near-drop-in replacement for Readonly, the facility for creating
-non-modifiable variables. This is useful for configuration files, headers,
-etc. It can also be useful as a development and debugging tool for catching
-updates to variables that should not be changed. See the section entitled
+This is a near-drop-in replacement for [Readonly](https://metacpan.org/pod/Readonly), the popular facility for
+creating non-modifiable variables. This is useful for configuration files,
+headers, etc. It can also be useful as a development and debugging tool for
+catching updates to variables that should not be changed.
+
+If you really need to have immutable variables in new code, use this instead
+of Readonly. You'll thank me later. See the section entitled
 ["ReadonlyX vs. Readonly"](#readonlyx-vs-readonly) for more.
 
 # Functions
 
-All of these functions are imported into your package by default.
+All of these functions can be imported into your package by name.
 
 ## Readonly::Scalar
 
@@ -70,13 +73,13 @@ Creates a non-modifiable scalar and assigns a value of to it. Thereafter, its
 value may not be changed. Any attempt to modify the value will cause your
 program to die.
 
-If `$value` is a reference to a scalar, array, or hash, then this function
-will mark the scalar, array, or hash it points to as being readonly as well,
-and it will recursively traverse the structure, marking the whole thing as
-readonly.
+If the given value is a reference to a scalar, array, or hash, then this
+function will mark the scalar, array, or hash it points to as being readonly
+as well, and it will recursively traverse the structure, marking the whole
+thing as readonly.
 
-If $var is already a Readonly variable, the program will die with an error
-about reassigning Readonly variables.
+If the variable is already readonly, the program will die with an error about
+reassigning readonly variables.
 
 ## Readonly::Array
 
@@ -92,8 +95,8 @@ this function will mark the scalar, array, or hash it points to as being
 Readonly as well, and it will recursively traverse the structure, marking the
 whole thing as Readonly.
 
-If the array is already Readonly, the program will die with an error about
-reassigning Readonly variables.
+If the variable is already readonly, the program will die with an error about
+reassigning readonly variables.
 
 ## Readonly::Hash
 
@@ -114,8 +117,8 @@ function will mark the scalar, array, or hash it points to as being Readonly
 as well, and it will recursively traverse the structure, marking the whole
 thing as Readonly.
 
-If the hash is already Readonly, the program will die with an error about
-reassigning Readonly variables.
+If the variable is already readonly, the program will die with an error about
+reassigning readonly variables.
 
 ## Readonly::Clone
 
@@ -140,13 +143,17 @@ Here are a few very simple examples again to get you started:
 
 ## Scalars
 
-A plain old read-only value
+A plain old read-only value:
 
     Readonly::Scalar $a => "A string value";
 
 The value need not be a compile-time constant:
 
     Readonly::Scalar $a => $computed_value;
+
+Need an undef constant? Okay:
+
+    Readonly::Scalar $a;
 
 ## Arrays/Lists
 
@@ -231,15 +238,18 @@ Darkpan.
 
 In short, unlike Readonly, ReadonlyX...
 
-- ...does not use slow `tie(...)` magic or eval. There should be almost no speed penalty
+- ...does not use slow `tie(...)` magic or eval. There shouldn't be a
+        speed penalty after making the structure immutable
 - ...does not strive to work on perl versions I can't even find a working
         build of to test against
 - ...has a single, clean API
-- Does the right thing when it comes to deep vs. shallow structures
-- Allows implicit undef values for scalars (Readonly inconsistantly allows
-        this for hashes and arrays but not scalars)
-- ...a lot more I can't think of right now but will add when they come to me
-- ...is around 100 lines instead of 460ish so maintaining it will be a breeze
+- ...does the right thing when it comes to deep vs. shallow structures
+- ...allows implicit undef values for scalars (Readonly inconsistantly
+        allows this for hashes and arrays but not scalars)
+- ...a lot more I can't think of right now but will add when they come to
+        me
+- ...is around 100 lines instead of 460ish so maintaining it will be a
+        breeze
 
 # Requirements
 

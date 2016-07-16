@@ -2,7 +2,7 @@ package ReadonlyX;
 use 5.008;
 use strict;
 use warnings;
-our $VERSION = "1.01";
+our $VERSION = "1.02";
 BEGIN { *ReadonlyX:: = *Readonly:: }
 package          # hide from PAUSE
     Readonly;    # I wish...
@@ -98,9 +98,9 @@ sub Clone(\[$@%]) {
               0
     );
     return ($type eq 'SCALAR' ?  $$retval
-         : $type eq 'ARRAY' ?  wantarray ? @$retval    : $retval
-         : $type eq 'HASH' ?  wantarray ?  %$retval    : $retval
-         : $retval;
+         : $type eq 'ARRAY' ?  wantarray ? @$retval : $retval
+         : $type eq 'HASH' ?  wantarray ?  %$retval : $retval
+         : $retval);
 }
 1;
 
@@ -155,10 +155,13 @@ ReadonlyX - Faster facility for creating read-only scalars, arrays, hashes
 
 =head1 Description
 
-This is a near-drop-in replacement for Readonly, the facility for creating
-non-modifiable variables. This is useful for configuration files, headers,
-etc. It can also be useful as a development and debugging tool for catching
-updates to variables that should not be changed. See the section entitled
+This is a near-drop-in replacement for L<Readonly>, the popular facility for
+creating non-modifiable variables. This is useful for configuration files,
+headers, etc. It can also be useful as a development and debugging tool for
+catching updates to variables that should not be changed.
+
+If you really need to have immutable variables in new code, use this instead
+of Readonly. You'll thank me later. See the section entitled
 L<ReadonlyX vs. Readonly> for more.
 
 =head1 Functions
