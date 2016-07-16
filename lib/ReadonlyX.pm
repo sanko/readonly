@@ -309,7 +309,7 @@ If you pass an odd number of values, the program will die:
 
 =head1 ReadonlyX vs. Readonly
 
-The original Readonly module was written for nearly twenty years ago when the
+The original Readonly module was written nearly twenty years ago when the
 built-in capability to lock variables didn't exist in perl's core. The
 original author came up with the amazingly brilliant idea to use the new (at
 the time) C<tie(...)> construct. It worked amazingly well! But it wasn't long
@@ -324,14 +324,15 @@ huge difference.
 During all this, two very distinct APIs were also designed and supported by
 Readonly. One for (then) modern perl and one written for perl 5.6. To make
 this happen, time consuming eval operations were required and the codebase
-grew so complex that fixing bugs were nearly impossible. Depending on what
-version of perl and what other modules you had installed, Readonly was three
-different modules all with different sets of quirks and bugs to fix.
+grew so complex that fixing bugs was nearly impossible. Readonly was three
+different modules all with different sets of quirks and bugs to fix depending
+on what version of perl and what other modules you had installed. It was a
+mess.
 
-Readonly was a mess. So, the original author abandoned both Readonly and
-Readonly::XS. As bugs were found, they went unfixed. The combination of speed
-and lack of development spawned several similar modules which usually did a
-better job but none were a total drop-in replacement.
+So, after the original author abandoned both Readonly and Readonly::XS, as
+bugs were found, they went unfixed. The combination of speed and lack of
+development spawned several similar modules which usually did a better job but
+none were a total drop-in replacement.
 
 Until now.
 
@@ -358,7 +359,7 @@ In short, unlike Readonly, ReadonlyX...
 
 =item ...a lot more I can't think of right now but will add when they come to me
 
-=item is around 100 lines instead of 460ish so maintaining it will be a breeze
+=item ...is around 100 lines instead of 460ish so maintaining it will be a breeze
 
 =back
 
