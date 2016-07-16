@@ -2,6 +2,8 @@ Revision history for Perl extension ReadonlyX.
 
 {{$NEXT}}
 
+    - Don't clobber predefined variables with implicit undef
+
 1.02 2016-07-16T12:40:12Z
 
     - Minor documentation update

@@ -19,25 +19,31 @@ sub Scalar($;$);
 sub Readonly(\[%@$]$);
 #
 sub Array(\@;@) {
+    my $var = $#_ == 0 && defined $_[0] ? $_[0] : $_[1];
     @{$_[0]}
-        = ref $_[1] eq 'ARRAY'
+        = ref $var eq 'ARRAY'
         && $#_ == 1
-        && ref $_[1] eq 'ARRAY' ? @{$_[1]} : @_[1 .. $#_];
+        && ref $var eq 'ARRAY' ? @{$var} : @_[1 .. $#_]
+        if $#_ > 0;
     _readonly($_[0]);
 }
 
 sub Hash(\%;@) {
+    my $var = $#_ == 0 && defined $_[0] ? $_[0] : $_[1];
+    my $ref = ref $var;
     Carp::croak 'Odd number of elements in hash assignment'
-        unless (@_ % 2 == 1) || ref $_[1] eq 'HASH';
-    %{$_[0]} = ref $_[1] eq 'HASH' && $#_ == 1 ? %{$_[1]} : @_[1 .. $#_];
+        unless (@_ % 2 == 1) || $ref eq 'HASH';
+    %{$_[0]} = ref $var eq 'HASH' && $#_ == 1 ? %{$var} : @_[1 .. $#_]
+        if $#_ > 0;
     _readonly($_[0]);
 }
 
 sub Scalar($;$) {
-    my $ref = ref $_[1];
-    $ref eq 'ARRAY' ? $_[0] = $_[1] : $ref eq 'HASH' ? $_[0]
-        = $_[1] : $ref eq 'SCALAR'
-        or $ref eq '' ? $_[0] = $_[1] : $ref eq 'REF' ? $_[0] = \$_[1] : 1;
+    my $var = $#_ == 0 && defined $_[0] ? $_[0] : $_[1];
+    my $ref = ref $var;
+    $ref eq 'ARRAY' ? $_[0] = $var : $ref eq 'HASH' ? $_[0]
+        = $var : $ref eq 'SCALAR'
+        or $ref eq '' ? $_[0] = $var : $ref eq 'REF' ? $_[0] = \$_[1] : 1;
     _readonly($_[0]);
     Internals::SvREADONLY($_[0], 1);
 }
@@ -97,10 +103,14 @@ sub Clone(\[$@%]) {
               ),
               0
     );
-    return ($type eq 'SCALAR' ?  $$retval
-         : $type eq 'ARRAY' ?  wantarray ? @$retval : $retval
-         : $type eq 'HASH' ?  wantarray ?  %$retval : $retval
-         : $retval);
+    return $type eq 'SCALAR' ?
+        $$retval
+        : ($type eq 'ARRAY' ?
+               wantarray ?
+               @$retval
+               : $retval
+               : ($type eq 'HASH' ? wantarray ? %$retval : $retval : $retval)
+        );
 }
 1;
 
@@ -119,6 +129,8 @@ ReadonlyX - Faster facility for creating read-only scalars, arrays, hashes
     Readonly::Scalar $sca1    => 3.14;
     Readonly::Scalar my $sca2 => time;
     Readonly::Scalar my $sca3 => 'Welcome';
+    my $sca4 = time();
+    Readonly::Scalar $sca4; # Value is not clobbered
 
     # Read-only array
     my @arr1;
@@ -363,6 +375,22 @@ In short, unlike Readonly, ReadonlyX...
 
 =item ...is around 100 lines instead of 460ish so maintaining it will be a
         breeze
+
+=item ...doesn't clobber predefined variables when making them readonly.
+
+In Readonly, this:
+
+    my $scalar = 'important value'; # Do other work that builds $scalar...
+    Readonly::Scalar $scalar;
+    print $scalar;
+
+...wouldn't actually work because of a different bug in Readonly but if I
+could fix that issue, you would still be printing an undefined value. I'm not
+sure why it was designed this way originally but in ReadonlyX, you wouldn't
+lose your C<'important value'>.
+
+Note that this is an incompatible change! If you attempt to do this and then
+switch to plain 'ol Readonly, your code will not work.
 
 =back
 

@@ -14,6 +14,8 @@ ReadonlyX - Faster facility for creating read-only scalars, arrays, hashes
     Readonly::Scalar $sca1    => 3.14;
     Readonly::Scalar my $sca2 => time;
     Readonly::Scalar my $sca3 => 'Welcome';
+    my $sca2 = time();
+    Readonly::Scalar $sca2; # Value is not clobbered
 
     # Read-only array
     my @arr1;
@@ -250,6 +252,21 @@ In short, unlike Readonly, ReadonlyX...
         me
 - ...is around 100 lines instead of 460ish so maintaining it will be a
         breeze
+- ...doesn't clobber predefined variables when making them readonly.
+
+    In Readonly, this:
+
+        my $scalar = 'important value'; # Do other work that builds $scalar...
+        Readonly::Scalar $scalar;
+        print $scalar;
+
+    ...wouldn't actually work because of a different bug in Readonly but if I
+    could fix that issue, you would still be printing an undefined value. I'm not
+    sure why it was designed this way originally but in ReadonlyX, you wouldn't
+    lose your `'important value'`.
+
+    Note that this is an incompatible change! If you attempt to do this and then
+    switch to plain 'ol Readonly, your code will not work.
 
 # Requirements
 
