@@ -359,7 +359,7 @@ In short, unlike Readonly, ReadonlyX...
 
 =item ...does not use slow C<tie(...)> magic or eval. There shouldn't be a
         speed penalty after making the structure immutable. See the
-        L<Benchmarks> section below.
+        L<Benchmarks> section below
 
 =item ...does not strive to work on perl versions I can't even find a working
         build of to test against
@@ -388,18 +388,17 @@ Bonus: Guess which one doesn't actually make the list items read only.
 =item ...is around 100 lines instead of 460ish so maintaining it will be a
         breeze
 
-=item ...doesn't clobber predefined variables when making them readonly.
+=item ...doesn't clobber predefined variables when making them readonly
 
-In Readonly, this:
+Using Readonly, this:
 
-    my $scalar = 'important value'; # Do other work that builds $scalar...
-    Readonly::Scalar $scalar;
-    print $scalar;
+    my @array = qw[very important stuff];
+    Readonly::Array @array;
+    print "@array";
 
-...wouldn't actually work because of a different bug in Readonly (see item #5)
-but if I could fix that issue, you would still be printing an undefined value.
-I'm not sure why it was designed this way originally but in ReadonlyX, you
-wouldn't lose your C<'important value'>.
+...wouldn't print anything. I consider it a bug but I'm not sure why it was
+designed this way originally. With ReadonlyX, you won't lose your
+C<'very important stuff'>.
 
 Note that this is an incompatible change! If you attempt to do this and then
 switch to plain 'ol Readonly, your code will not work.
@@ -408,7 +407,7 @@ switch to plain 'ol Readonly, your code will not work.
 
 =head1 Benchmarks
 
-Don't believe Readonly is slow? Here's the benchmarks:
+Don't believe Readonly is slow? Here's the result of basic benchmarking:
 
     Hash Benchmark: timing 5000000 iterations of const, normal, readonly, readonlyx...
          const:  3 wallclock secs ( 2.73 usr +  0.02 sys =  2.75 CPU) @ 1818181.82/s (n=5000000)

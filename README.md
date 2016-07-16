@@ -242,7 +242,7 @@ In short, unlike Readonly, ReadonlyX...
 
 - ...does not use slow `tie(...)` magic or eval. There shouldn't be a
         speed penalty after making the structure immutable. See the
-        [Benchmarks](https://metacpan.org/pod/Benchmarks) section below.
+        [Benchmarks](https://metacpan.org/pod/Benchmarks) section below
 - ...does not strive to work on perl versions I can't even find a working
         build of to test against
 - ...has a single, clean API! What do all of these different forms of the
@@ -265,25 +265,24 @@ In short, unlike Readonly, ReadonlyX...
         me
 - ...is around 100 lines instead of 460ish so maintaining it will be a
         breeze
-- ...doesn't clobber predefined variables when making them readonly.
+- ...doesn't clobber predefined variables when making them readonly
 
-    In Readonly, this:
+    Using Readonly, this:
 
-        my $scalar = 'important value'; # Do other work that builds $scalar...
-        Readonly::Scalar $scalar;
-        print $scalar;
+        my @array = qw[very important stuff];
+        Readonly::Array @array;
+        print "@array";
 
-    ...wouldn't actually work because of a different bug in Readonly (see item #5)
-    but if I could fix that issue, you would still be printing an undefined value.
-    I'm not sure why it was designed this way originally but in ReadonlyX, you
-    wouldn't lose your `'important value'`.
+    ...wouldn't print anything. I consider it a bug but I'm not sure why it was
+    designed this way originally. With ReadonlyX, you won't lose your
+    `'very important stuff'`.
 
     Note that this is an incompatible change! If you attempt to do this and then
     switch to plain 'ol Readonly, your code will not work.
 
 # Benchmarks
 
-Don't believe Readonly is slow? Here's the benchmarks:
+Don't believe Readonly is slow? Here's the result of basic benchmarking:
 
     Hash Benchmark: timing 5000000 iterations of const, normal, readonly, readonlyx...
          const:  3 wallclock secs ( 2.73 usr +  0.02 sys =  2.75 CPU) @ 1818181.82/s (n=5000000)
