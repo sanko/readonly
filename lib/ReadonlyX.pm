@@ -3,7 +3,8 @@ use 5.005;
 use strict;
 use warnings;
 our $VERSION = "2.06";
-BEGIN {*ReadonlyX:: = *Readonly::}
+BEGIN { *ReadonlyX:: = *Readonly:: }
+
 package Readonly;
 use Carp;
 use Exporter;
@@ -14,7 +15,7 @@ push @EXPORT_OK, qw/Scalar Array Hash/;
 #
 sub Array(\@;@);
 sub Hash(\%;@);
-sub Scalar($$);
+sub Scalar($;$);
 sub Readonly(\[%@$]$);
 #
 sub Array(\@;@) {
@@ -32,7 +33,7 @@ sub Hash(\%;@) {
     _readonly($_[0]);
 }
 
-sub Scalar($$) {
+sub Scalar($;$) {
     my $ref = ref $_[1];
     $ref eq 'ARRAY' ? $_[0] = $_[1] : $ref eq 'HASH' ? $_[0]
         = $_[1] : $ref eq 'SCALAR'
@@ -109,247 +110,119 @@ sub Clone(\[$@%]) {
         : $retval;
 }
 1;
+
 package ReadonlyX;
 use 5.005;
 use strict;
 use warnings;
 our $VERSION = "2.06";
-BEGIN {*ReadonlyX:: = *Readonly::}
+BEGIN { *ReadonlyX:: = *Readonly:: }
 1;
+
 =head1 NAME
 
-Readonly - Faster facility for creating read-only scalars, arrays, hashes
+ReadonlyX - Faster facility for creating read-only scalars, arrays, hashes
 
 =head1 Synopsis
 
-    use Readonly;
+    use strict;
+    use warnings;
+    use ReadonlyX;
 
-    # Deep Read-only scalar
-    Readonly::Scalar    $sca => $initial_value;
-    Readonly::Scalar my $sca => $initial_value;
+    # Read-only scalar
+    my $sca1;
+    Readonly::Scalar $sca1    => 3.14;
+    Readonly::Scalar my $sca2 => time;
+    Readonly::Scalar my $sca3 => 'Welcome';
 
-    # Deep Read-only array
-    Readonly::Array    @arr => @values;
-    Readonly::Array my @arr => @values;
+    # Read-only array
+    my @arr1;
+    Readonly::Array @arr1 => [1 .. 4];
 
-    # Deep Read-only hash
-    Readonly::Hash    %has => (key => value, key => value, ...);
-    Readonly::Hash my %has => (key => value, key => value, ...);
     # or:
-    Readonly::Hash    %has => {key => value, key => value, ...};
+    Readonly::Array my @arr2 => (1, 3, 5, 7, 9);
+
+    # Read-only hash
+    my %hash1;
+    Readonly::Hash %hash1    => (key => 'value', key2 => 'value');
+    Readonly::Hash my %hash2 => (key => 'value', key2 => 'value');
+
+    # or:
+    Readonly::Hash my %hash3 => {key => 'value', key2 => 'value'};
 
     # You can use the read-only variables like any regular variables:
-    print $sca;
-    $something = $sca + $arr[2];
-    next if $has{$some_key};
+    print $sca1;
+    my $something = $sca1 + $arr1[2];
+    warn 'Blah!' if $hash1{key2};
 
     # But if you try to modify a value, your program will die:
-    $sca = 7;
-    push @arr, 'seven';
-    delete $has{key};
-    # The error message is "Modification of a read-only value attempted"
+    $sca2 = 7;           # "Modification of a read-only value attempted"
+    push @arr1, 'seven'; # "Modification of a read-only value attempted"
+    $arr1[1] = 'nine';   # "Modification of a read-only value attempted"
+    delete $hash1{key};  # Attempt to delete readonly key 'key' from a restricted hash
 
-    # Alternate form (Perl 5.8 and later)
-    Readonly    $sca => $initial_value;
-    Readonly my $sca => $initial_value;
-    Readonly    @arr => @values;
-    Readonly my @arr => @values;
-    Readonly    %has => (key => value, key => value, ...);
-    Readonly my %has => (key => value, key => value, ...);
-    Readonly my $sca; # Implicit undef, readonly value
-
-    # Alternate form (for Perls earlier than v5.8)
-    Readonly    \$sca => $initial_value;
-    Readonly \my $sca => $initial_value;
-    Readonly    \@arr => @values;
-    Readonly \my @arr => @values;
-    Readonly    \%has => (key => value, key => value, ...);
-    Readonly \my %has => (key => value, key => value, ...);
+    # Create mutable clones
+    Readonly::Scalar $scalar => {qw[this that]};
+    # $scalar->{'eh'} = 'foo'; # Modification of a read-only value attempted
+    my $scalar_clone = Readonly::Clone $scalar;
+    $scalar_clone->{'eh'} = 'foo';
+    # $scalar_clone is now {this => 'that', eh => 'foo'};
 
 =head1 Description
 
-This is a facility for creating non-modifiable variables. This is useful for
-configuration files, headers, etc. It can also be useful as a development and
-debugging tool for catching updates to variables that should not be changed.
-
-=head1 Variable Depth
-
-Readonly has the ability to create both deep and shallow readonly variables.
-
-If you pass a C<$ref>, an C<@array> or a C<%hash> to corresponding functions
-C<::Scalar()>, C<::Array()> and C<::Hash()>, then those functions recurse over
-the data structure, marking everything as readonly. The entire structure is
-then non-modifiable. This is normally what you want.
-
-If you want only the top level to be readonly, use the alternate (and poorly
-named) C<::Scalar1()>, C<::Array1()>, and C<::Hash1()> functions.
-
-Plain C<Readonly()> creates what the original author calls a "shallow"
-readonly variable, which is great if you don't plan to use it on anything but
-only one dimensional scalar values.
-
-C<Readonly::Scalar()> makes the variable 'deeply' readonly, so the following
-snippet kills over as you expect:
-
- use Readonly;
-
- Readonly::Scalar my $ref => { 1 => 'a' };
- $ref->{1} = 'b';
- $ref->{2} = 'b';
-
-While the following snippet does B<not> make your structure 'deeply' readonly:
-
- use Readonly;
-
- Readonly my $ref => { 1 => 'a' };
- $ref->{1} = 'b';
- $ref->{2} = 'b';
-
-=head1
-
-=head1 The Past
-
-The following sections are updated versions of the previous authors
-documentation.
-
-=head2 Comparison with "use constant"
-
-Perl provides a facility for creating constant values, via the L<constant>
-pragma. There are several problems with this pragma.
-
-=over 2
-
-=item * The constants created have no leading sigils.
-
-=item * These constants cannot be interpolated into strings.
-
-=item * Syntax can get dicey sometimes.  For example:
-
-    use constant CARRAY => (2, 3, 5, 7, 11, 13);
-    $a_prime = CARRAY[2];        # wrong!
-    $a_prime = (CARRAY)[2];      # right -- MUST use parentheses
-
-=item * You have to be very careful in places where barewords are allowed.
-
-For example:
-
-    use constant SOME_KEY => 'key';
-    %hash = (key => 'value', other_key => 'other_value');
-    $some_value = $hash{SOME_KEY};        # wrong!
-    $some_value = $hash{+SOME_KEY};       # right
-
-(who thinks to use a unary plus when using a hash to scalarize the key?)
-
-=item * C<use constant> works for scalars and arrays, not hashes.
-
-=item * These constants are global to the package in which they're declared;
-cannot be lexically scoped.
-
-=item * Works only at compile time.
-
-=item * Can be overridden:
-
-    use constant PI => 3.14159;
-    ...
-    use constant PI => 2.71828;
-
-(this does generate a warning, however, if you have warnings enabled).
-
-=item * It is very difficult to make and use deep structures (complex data
-structures) with C<use constant>.
-
-=back
-
-=head1 Comparison with typeglob constants
-
-Another popular way to create read-only scalars is to modify the symbol table
-entry for the variable by using a typeglob:
-
-    *a = \'value';
-
-This works fine, but it only works for global variables ("my" variables have
-no symbol table entry). Also, the following similar constructs do B<not> work:
-
-    *a = [1, 2, 3];      # Does NOT create a read-only array
-    *a = { a => 'A'};    # Does NOT create a read-only hash
-
-=head2 Pros
-
-Readonly.pm, on the other hand, will work with global variables and with
-lexical ("my") variables. It will create scalars, arrays, or hashes, all of
-which look and work like normal, read-write Perl variables. You can use them
-in scalar context, in list context; you can take references to them, pass them
-to functions, anything.
-
-Readonly.pm also works well with complex data structures, allowing you to tag
-the whole structure as nonmodifiable, or just the top level.
-
-Also, Readonly variables may not be reassigned. The following code will die:
-
-    Readonly::Scalar $pi => 3.14159;
-    ...
-    Readonly::Scalar $pi => 2.71828;
-
-=head2 Cons
-
-Readonly.pm used to impose a performance penalty. It was pretty slow. How
-slow? Run the C<eg/benchmark.pl> script that comes with Readonly. On my test
-system, "use constant" (const), typeglob constants (tglob), regular read/write
-Perl variables (normal/literal), and the new Readonly (ro/ro_simple) are all
-about the same speed, the old, tie based Readonly.pm constants were about 1/22
-the speed.
-
-However, there is relief. There is a companion module available, Readonly::XS.
-You won't need this if you're using Perl 5.8.x or higher.
-
-I repeat, you do not need Readonly::XS if your environment has perl 5.8.x or
-higher. Please see section entitled L<Internals|/"Internals"> for more.
+This is a near-drop-in replacement for Readonly, the facility for creating
+non-modifiable variables. This is useful for configuration files, headers,
+etc. It can also be useful as a development and debugging tool for catching
+updates to variables that should not be changed. See the section entitled
+L<ReadonlyX vs. Readonly> for more.
 
 =head1 Functions
 
-=over 4
+All of these functions are imported into your package by default.
 
-=item Readonly::Scalar $var => $value;
+=head2 Readonly::Scalar
 
-Creates a nonmodifiable scalar, C<$var>, and assigns a value of C<$value> to
-it. Thereafter, its value may not be changed. Any attempt to modify the value
-will cause your program to die.
+    Readonly::Scalar $pi      => 3.14;
+    Readonly::Scalar my $aref => [qw[this that]]; # list ref
+    Readonly::Scalar my $href => {qw[this that]}; # hash ref
 
-A value I<must> be supplied. If you want the variable to have C<undef> as its
-value, you must specify C<undef>.
+Creates a non-modifiable scalar and assigns a value of to it. Thereafter, its
+value may not be changed. Any attempt to modify the value will cause your
+program to die.
 
 If C<$value> is a reference to a scalar, array, or hash, then this function
-will mark the scalar, array, or hash it points to as being Readonly as well,
+will mark the scalar, array, or hash it points to as being readonly as well,
 and it will recursively traverse the structure, marking the whole thing as
-Readonly. Usually, this is what you want. However, if you want only the
-C<$value> marked as Readonly, use C<Scalar1>.
+readonly.
 
 If $var is already a Readonly variable, the program will die with an error
 about reassigning Readonly variables.
 
-=item Readonly::Array @arr => (value, value, ...);
+=head2 Readonly::Array
 
-Creates a nonmodifiable array, C<@arr>, and assigns the specified list of
-values to it. Thereafter, none of its values may be changed; the array may not
-be lengthened or shortened or spliced. Any attempt to do so will cause your
-program to die.
+    Readonly::Array @arr1    => [1 .. 4];
+    Readonly::Array my @arr2 => (1, 3, 5, 7, 9);
+
+Creates a non-modifiable array and assigns the specified list of values to it.
+Thereafter, none of its values may be changed; the array may not be lengthened
+or shortened. Any attempt to do so will cause your program to die.
 
 If any of the values passed is a reference to a scalar, array, or hash, then
 this function will mark the scalar, array, or hash it points to as being
 Readonly as well, and it will recursively traverse the structure, marking the
-whole thing as Readonly. Usually, this is what you want. However, if you want
-only the hash C<%@arr> itself marked as Readonly, use C<Array1>.
+whole thing as Readonly.
 
-If C<@arr> is already a Readonly variable, the program will die with an error
-about reassigning Readonly variables.
+If the array is already Readonly, the program will die with an error about
+reassigning Readonly variables.
 
-=item Readonly::Hash %h => (key => value, key => value, ...);
+=head2 Readonly::Hash
 
-=item Readonly::Hash %h => {key => value, key => value, ...};
+    Readonly::Hash %h => (key => 'value', key2 => 'value');
+    Readonly::Hash %h => {key => 'value', key2 => 'value'};
 
-Creates a nonmodifiable hash, C<%h>, and assigns the specified keys and values
-to it. Thereafter, its keys or values may not be changed. Any attempt to do so
-will cause your program to die.
+Creates a non-modifiable hash and assigns the specified keys and values to it.
+Thereafter, its keys or values may not be changed. Any attempt to do so will
+cause your program to die.
 
 A list of keys and values may be specified (with parentheses in the synopsis
 above), or a hash reference may be specified (curly braces in the synopsis
@@ -359,69 +232,18 @@ the function will die.
 If any of the values is a reference to a scalar, array, or hash, then this
 function will mark the scalar, array, or hash it points to as being Readonly
 as well, and it will recursively traverse the structure, marking the whole
-thing as Readonly. Usually, this is what you want. However, if you want only
-the hash C<%h> itself marked as Readonly, use C<Hash1>.
+thing as Readonly.
 
-If C<%h> is already a Readonly variable, the program will die with an error
-about reassigning Readonly variables.
+If the hash is already Readonly, the program will die with an error about
+reassigning Readonly variables.
 
-=item Readonly $var => $value;
+=head2 Readonly::Clone
 
-=item Readonly @arr => (value, value, ...);
+    my $scalar_clone = Readonly::Clone $scalar;
 
-=item Readonly %h => (key => value, ...);
-
-=item Readonly %h => {key => value, ...};
-
-=item Readonly $var;
-
-The C<Readonly> function is an alternate to the C<Scalar>, C<Array>, and
-C<Hash> functions. It has the advantage (if you consider it an advantage) of
-being one function. That may make your program look neater, if you're
-initializing a whole bunch of constants at once. You may or may not prefer
-this uniform style.
-
-It has the disadvantage of having a slightly different syntax for versions of
-Perl prior to 5.8.  For earlier versions, you must supply a backslash, because
-it requires a reference as the first parameter.
-
-    Readonly \$var => $value;
-    Readonly \@arr => (value, value, ...);
-    Readonly \%h   => (key => value, ...);
-    Readonly \%h   => {key => value, ...};
-
-You may or may not consider this ugly.
-
-Note that you can create implicit undefined variables with this function like
-so C<Readonly my $var;> while a verbose undefined value must be passed to the
-standard C<Scalar>, C<Array>, and C<Hash> functions.
-
-=item Readonly::Scalar1 $var => $value;
-
-=item Readonly::Array1 @arr => (value, value, ...);
-
-=item Readonly::Hash1 %h => (key => value, key => value, ...);
-
-=item Readonly::Hash1 %h => {key => value, key => value, ...};
-
-These alternate functions create shallow Readonly variables, instead of deep
-ones. For example:
-
-    Readonly::Array1 @shal => (1, 2, {perl=>'Rules', java=>'Bites'}, 4, 5);
-    Readonly::Array  @deep => (1, 2, {perl=>'Rules', java=>'Bites'}, 4, 5);
-
-    $shal[1] = 7;           # error
-    $shal[2]{APL}='Weird';  # Allowed! since the hash isn't Readonly
-    $deep[1] = 7;           # error
-    $deep[2]{APL}='Weird';  # error, since the hash is Readonly
-
-=back
-
-=head1 Cloning
-
-When cloning using L<Storable> or L<Clone> you will notice that the value stays
-readonly, which is correct. If you want to clone the value without copying the
-readonly flag, use the C<Clone> function:
+When cloning using L<Storable> or L<Clone> you will notice that the value
+stays readonly, which is correct. If you want to clone the value without
+copying the readonly flag, use this.
 
     Readonly::Scalar my $scalar => {qw[this that]};
     # $scalar->{'eh'} = 'foo'; # Modification of a read-only value attempted
@@ -429,12 +251,12 @@ readonly flag, use the C<Clone> function:
     $scalar_clone->{'eh'} = 'foo';
     # $scalar_clone is now {this => 'that', eh => 'foo'};
 
-The new variable (C<$scalar_clone>) is a mutable clone of the original
-C<$scalar>.
+In this example, the new variable (C<$scalar_clone>) is a mutable clone of the
+original C<$scalar>. You can change it like any other variable.
 
 =head1 Examples
 
-These are a few very simple examples:
+Here are a few very simple examples again to get you started:
 
 =head2 Scalars
 
@@ -458,7 +280,7 @@ The parentheses are optional:
 
 You can use Perl's built-in array quoting syntax:
 
-    Readonly::Array @a => qw/1 2 3 4/;
+    Readonly::Array @a => qw[1 2 3 4];
 
 You can initialize a read-only array from a variable one:
 
@@ -467,13 +289,16 @@ You can initialize a read-only array from a variable one:
 A read-only array can be empty, too:
 
     Readonly::Array @a => ();
-    Readonly::Array @a;        # equivalent
+    # or
+    Readonly::Array @a;
 
 =head2 Hashes
 
 Typical usage:
 
     Readonly::Hash %a => (key1 => 'value1', key2 => 'value2');
+    # or
+    Readonly::Hash %a => {key1 => 'value1', key2 => 'value2'};
 
 A read-only hash can be initialized from a variable one:
 
@@ -482,65 +307,70 @@ A read-only hash can be initialized from a variable one:
 A read-only hash can be empty:
 
     Readonly::Hash %a => ();
-    Readonly::Hash %a;        # equivalent
+    # or
+    Readonly::Hash %a;
 
 If you pass an odd number of values, the program will die:
 
-    Readonly::Hash %a => (key1 => 'value1', "value2");
-    # This dies with "May not store an odd number of values in a hash"
+    Readonly::Hash my %a => (key1 => 'value1', "value2");
+    # This dies with "Odd number of elements in hash assignment"
 
-=head1 Exports
+=head1 ReadonlyX vs. Readonly
 
-Historically, this module exports the C<Readonly> symbol into the calling
-program's namespace by default. The following symbols are also available for
-import into your program, if you like: C<Scalar>, C<Scalar1>, C<Array>,
-C<Array1>, C<Hash>, and C<Hash1>.
+The original Readonly module was written for nearly twenty years ago when the
+built-in capability to lock variables didn't exist in perl's core. The
+original author came up with the amazingly brilliant idea to use the new (at
+the time) C<tie(...)> construct. It worked amazingly well! But it wasn't long
+before the speed penalty of tied varibles became embarrassingly obvious. Check
+any review of Readonly written before 2013; the main complaint was how slow it
+was and the benchmarks proved it.
 
-=head1 Internals
+In an equally brilliant move to work around tie, Readonly::XS was released for
+perl 5.8.9 and above. This bypassed C<tie(...)> for basic scalars which made a
+huge difference.
 
-Some people simply do not understand the relationship between this module and
-Readonly::XS so I'm adding this section. Odds are, they still won't understand
-but I like to write so...
+During all this, two very distinct APIs were also designed and supported by
+Readonly. One for (then) modern perl and one written for perl 5.6. To make
+this happen, time consuming eval operations were required and the codebase
+grew so complex that fixing bugs were nearly impossible. Depending on what
+version of perl and what other modules you had installed, Readonly was three
+different modules all with different sets of quirks and bugs to fix.
 
-In the past, Readonly's "magic" was performed by C<tie()>-ing variables to the
-C<Readonly::Scalar>, C<Readonly::Array>, and C<Readonly::Hash> packages (not
-to be confused with the functions of the same names) and acting on C<WRITE>,
-C<READ>, et. al. While this worked well, it was slow. Very slow. Like 20-30
-times slower than accessing variables directly or using one of the other
-const-related modules that have cropped up since Readonly was released in
-2003.
+Readonly was a mess. So, the original author abandoned both Readonly and
+Readonly::XS. As bugs were found, they went unfixed. The combination of speed
+and lack of development spawned several similar modules which usually did a
+better job but none were a total drop-in replacement.
 
-To 'fix' this, Readonly::XS was written. If installed, Readonly::XS used the
-internal methods C<SvREADONLY> and C<SvREADONLY_on> to lock simple scalars. On
-the surface, everything was peachy but things weren't the same behind the
-scenes. In edge cases, code performed very differently if Readonly::XS was
-installed and because it wasn't a required dependency in most code, it made
-downstream bugs very hard to track.
+Until now.
 
-In the years since Readonly::XS was released, the then private internal
-methods have been exposed and can be used in pure perl. Similar modules were
-written to take advantage of this and a patch to Readonly was created. We no
-longer need to build and install another module to make Readonly useful on
-modern builds of perl.
+ReadonlyX is the best of recent versions of Readonly without the old API and
+without the speed penalty of C<tie(...)>. It's what I'd like to do with
+Readonly if resolving bugs in it wouldn't break 16 years of code out there in
+Darkpan.
+
+In short, unlike Readonly, ReadonlyX...
 
 =over
 
-=item * You do not need to install Readonly::XS.
+=item ...does not use slow C<tie(...)> magic or eval. There should be almost no speed penalty
 
-=item * You should stop listing Readonly::XS as a dependency or expect it to
-be installed.
+=item ...does not strive to work on perl versions I can't even find a working
+        build of to test against
 
-=item * Stop testing the C<$Readonly::XSokay> variable!
+=item ...has a single, clean API
+
+=item Does the right thing when it comes to deep vs. shallow structures
+
+=item Allows implicit undef values for scalars (Readonly inconsistantly allows
+        this for hashes and arrays but not scalars)
+
+=item ...a lot more I can't think of right now but will add when they come to me
+
+=item is around 100 lines instead of 460ish so maintaining it will be a breeze
 
 =back
 
 =head1 Requirements
-
-Please note that most users of Readonly no longer need to install the
-companion module Readonly::XS which is recommended but not required for perl
-5.6.x and under. Please do not force it as a requirement in new code and do
-not use the package variable C<$Readonly::XSokay> in code/tests. For more, see
-L<the section on Readonly's new internals/Internals>.
 
 There are no non-core requirements.
 
@@ -550,30 +380,15 @@ If email is better for you, L<my address is mentioned below|/"Author"> but I
 would rather have bugs sent through the issue tracker found at
 http://github.com/sanko/readonly/issues.
 
-=head1 Acknowledgements
-
-Thanks to Slaven Rezic for the idea of one common function (Readonly) for all
-three types of variables (13 April 2002).
-
-Thanks to Ernest Lergon for the idea (and initial code) for deeply-Readonly
-data structures (21 May 2002).
-
-Thanks to Damian Conway for the idea (and code) for making the Readonly
-function work a lot smoother under perl 5.8+.
-
 =head1 Author
 
 Sanko Robinson <sanko@cpan.org> - http://sankorobinson.com/
 
 CPAN ID: SANKO
 
-Original author: Eric J. Roode, roode@cpan.org
-
 =head1 License and Legal
 
-Copyright (C) 2013-2016 by Sanko Robinson <sanko@cpan.org>
-
-Copyright (c) 2001-2004 by Eric J. Roode. All Rights Reserved.
+Copyright (C) 2016 by Sanko Robinson <sanko@cpan.org>
 
 This module is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
