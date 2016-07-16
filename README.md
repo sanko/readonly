@@ -244,18 +244,18 @@ In short, unlike Readonly, ReadonlyX...
         speed penalty after making the structure immutable
 - ...does not strive to work on perl versions I can't even find a working
         build of to test against
-- ...has a single, clean API!
+- ...has a single, clean API! What do all of these different forms of the
+        original Readonly API do?
 
         use Readonly;
         Readonly  my @array1        => [2];
         Readonly \my @array2        => [2];
-        Readonly::Array my @array3  => [2];
+        Readonly::Array  my @array3 => [2];
         Readonly::Array1 my @array4 => [2];
 
-    What do all of these different forms of the Readonly API do? Be careful
-    because they all behave very differently. Even your version of perl changes
-    how they work. Bonus: Guess which one doesn't actually make the list items
-    read only.
+    Be careful because they all behave very differently. Even your version of perl
+    and the contents of the list changes how they work. Give up? Yeah, me too.
+    Bonus: Guess which one doesn't actually make the list items read only.
 
 - ...does the right thing when it comes to deep vs. shallow structures
 - ...allows implicit undef values for scalars (Readonly inconsistantly

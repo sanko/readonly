@@ -33,8 +33,12 @@ is scalar(@ma1) => 0, 'Lexical size (zero)';
 is $#a2         => 4, 'Global last element (nonzero)';
 
 # store (2 tests)
-eval { $ma1[0] = 5; };
-is $@ => expected(__LINE__- 1), 'Lexical store';
+TODO: {
+    local $TODO
+        = 'perl *could* mess with some readonly vars before 5.12 stable';
+    eval { $ma1[0] = 5; };
+    is $@ => expected(__LINE__- 1), 'Lexical store';
+}
 eval { $a2[3] = 4; };
 is $@ => expected(__LINE__- 1), 'Global store';
 
@@ -56,10 +60,14 @@ SKIP: {
 # clear (1 test)
 eval { @a1 = (); };
 is $@ => expected(__LINE__- 1), 'clear';
+TODO: {
+    local $TODO
+        = 'perl *could* mess with some readonly vars before 5.12 stable';
 
-# push (1 test)
-eval { push @ma1, -1; };
-is $@ => expected(__LINE__- 1), 'push';
+    # push (1 test)
+    eval { push @ma1, -1; };
+    is $@ => expected(__LINE__- 1), 'push';
+}
 
 # unshift (1 test)
 eval { unshift @a2, -1; };
@@ -72,8 +80,8 @@ is $@ => expected(__LINE__- 1), 'pop';
 # shift (1 test)
 eval { shift(@a2); };
 is $@ => expected(__LINE__- 1), 'shift';
-SKIP: {
-    skip "Can't test splice on readonly array; bug in perl", 1;
+TODO: {
+    local $TODO = "Can't test splice on readonly array; bug in perl";
 
     # splice (1 test)
     eval { splice @a2, 0, 1; };
