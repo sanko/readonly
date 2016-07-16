@@ -14,8 +14,8 @@ ReadonlyX - Faster facility for creating read-only scalars, arrays, hashes
     Readonly::Scalar $sca1    => 3.14;
     Readonly::Scalar my $sca2 => time;
     Readonly::Scalar my $sca3 => 'Welcome';
-    my $sca2 = time();
-    Readonly::Scalar $sca2; # Value is not clobbered
+    my $sca4 = time();
+    Readonly::Scalar $sca4; # Value is not clobbered
 
     # Read-only array
     my @arr1;
@@ -244,7 +244,19 @@ In short, unlike Readonly, ReadonlyX...
         speed penalty after making the structure immutable
 - ...does not strive to work on perl versions I can't even find a working
         build of to test against
-- ...has a single, clean API
+- ...has a single, clean API!
+
+        use Readonly;
+        Readonly  my @array1        => [2];
+        Readonly \my @array2        => [2];
+        Readonly::Array my @array3  => [2];
+        Readonly::Array1 my @array4 => [2];
+
+    What do all of these different forms of the Readonly API do? Be careful
+    because they all behave very differently. Even your version of perl changes
+    how they work. Bonus: Guess which one doesn't actually make the list items
+    read only.
+
 - ...does the right thing when it comes to deep vs. shallow structures
 - ...allows implicit undef values for scalars (Readonly inconsistantly
         allows this for hashes and arrays but not scalars)
@@ -260,10 +272,10 @@ In short, unlike Readonly, ReadonlyX...
         Readonly::Scalar $scalar;
         print $scalar;
 
-    ...wouldn't actually work because of a different bug in Readonly but if I
-    could fix that issue, you would still be printing an undefined value. I'm not
-    sure why it was designed this way originally but in ReadonlyX, you wouldn't
-    lose your `'important value'`.
+    ...wouldn't actually work because of a different bug in Readonly (see item #5)
+    but if I could fix that issue, you would still be printing an undefined value.
+    I'm not sure why it was designed this way originally but in ReadonlyX, you
+    wouldn't lose your `'important value'`.
 
     Note that this is an incompatible change! If you attempt to do this and then
     switch to plain 'ol Readonly, your code will not work.
