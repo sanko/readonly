@@ -1,83 +1,76 @@
-#!/usr/bin/perl
-# Very simple benchmark script to show how slow Readonly.pm is,
-# and how Readonly::XS solves the problem.
 use strict;
+use warnings;
 use lib '../lib';
-use Readonly;
 use Benchmark;
-use vars qw/$feedme/;
-#
-# use constant
-#
-use constant CONST_LINCOLN => 'Fourscore and seven years ago...';
-
-sub const {
-    $feedme = CONST_LINCOLN;
-}
-#
-# literal constant
-#
-sub literal {
-    $feedme = 'Fourscore and seven years ago...';
-}
-#
-# typeglob constant
-#
-use vars qw/$glob_lincoln/;
-*glob_lincoln = \'Fourscore and seven years ago...';
-
-sub tglob {
-    $feedme = $glob_lincoln;
-}
-#
-# Normal perl read/write scalar
-#
-use vars qw/$norm_lincoln/;
-$norm_lincoln = 'Fourscore and seven years ago...';
-
-sub normal {
-    $feedme = $norm_lincoln;
-}
-#
-# Readonly.pm with verbose API
-#
-use vars qw/$ro_lincoln/;
-Readonly::Scalar $ro_lincoln => 'Fourscore and seven years ago...';
-
-sub ro {
-    $feedme = $ro_lincoln;
-}
-#
-# Readonly.pm with simple API
-#
-use vars qw/$ro_simple_lincoln/;
-Readonly $ro_simple_lincoln => 'Fourscore and seven years ago...';
-
-sub ro_simple {
-    $feedme = $ro_simple_lincoln;
-}
-#
-# Readonly.pm w/o Readonly::XS
-#
-use vars qw/$rotie_lincoln/;
+my $scalar;
 {
-    local $Readonly::XSokay = 0;    # disable XS
-    Readonly::Scalar $rotie_lincoln => 'Fourscore and seven years ago...';
-}
 
-sub rotie {
-    $feedme = $rotie_lincoln;
+    package constant;
+    use constant CONST_SCALAR => 'Fourscore and seven years ago...';
+    use constant CONST_HASH   => {key => 'value'};
+    use constant CONST_ARRAY  => qw[dog cat bird fish];
+    sub scalar { $scalar = CONST_SCALAR; }
+    sub hash   { $scalar = CONST_HASH->{key}; }
+    sub array  { $scalar = (CONST_ARRAY)[1]; }
 }
-my $code = {const     => \&const,
-            literal   => \&literal,
-            tglob     => \&tglob,
-            normal    => \&normal,
-            ro        => \&ro,
-            ro_simple => \&ro_simple,
-            rotie     => \&rotie,
-};
-unless ($Readonly::XSokay) {
-    print "Readonly::XS module not found; skipping that test.\n";
-    delete $code->{roxs};
+{
+
+    package normal;
+    my $normal_scalar = 'Fourscore and seven years ago...';
+    my %normal_hash   = (key => 'value');
+    my @normal_array  = (qw[dog cat bird fish]);
+    sub scalar { $scalar = $normal_scalar; }
+    sub hash   { $scalar = $normal_hash{key}; }
+    sub array  { $scalar = $normal_array[1]; }
 }
-timethese(2_000_000, $code);
+{
+
+    package readonly;
+    use namespace::clean;
+    my ($normal_scalar, %normal_hash, @normal_array);
+    eval <<'END';
+    use Readonly;
+    Readonly::Scalar $normal_scalar => 'Fourscore and seven years ago...';
+    Readonly::Hash %normal_hash     => {key => 'value'};
+    Readonly::Array @normal_array   => qw[dog cat bird fish];
+END
+    sub scalar { $scalar = $normal_scalar; }
+    sub hash   { $scalar = $normal_hash{key}; }
+    sub array  { $scalar = $normal_array[1]; }
+}
+{
+
+    package readonlyx;
+    my ($normal_scalar, %normal_hash, @normal_array);
+    eval <<'END';
+    use ReadonlyX;
+    Readonly::Scalar $normal_scalar => 'Fourscore and seven years ago...';
+    Readonly::Hash %normal_hash     => {key => 'value'};
+    Readonly::Array @normal_array   => qw[dog cat bird fish];
+END
+    sub scalar { $scalar = $normal_scalar; }
+    sub hash   { $scalar = $normal_hash{key}; }
+    sub array  { $scalar = $normal_array[1]; }
+}
+#
+my %tests = (scalar => {const     => \&constant::scalar,
+                        normal    => \&normal::scalar,
+                        readonlyx => \&readonlyx::scalar,
+                        readonly  => \&readonly::scalar
+             },
+             hash => {const     => \&constant::hash,
+                      normal    => \&normal::hash,
+                      readonlyx => \&readonlyx::hash,
+                      readonly  => \&readonly::hash
+             },
+             array => {const     => \&constant::array,
+                       normal    => \&normal::array,
+                       readonlyx => \&readonlyx::array,
+                       readonly  => \&readonly::array
+             }
+);
+#
+for my $type (keys %tests) {
+    print ucfirst $type . ' ';
+    timethese(5_000_000, $tests{$type});
+}

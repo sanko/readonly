@@ -5,6 +5,7 @@ Revision history for Perl extension ReadonlyX.
     - Don't clobber predefined variables with implicit undef
     - More documentation updates
     - Wrap tests that could fail due to bugs in perl related to readonly arrays
+    - Include Readonly vs. ReadonlyX benchmarks in docs and update eg/benchmark.pl
 
 1.02 2016-07-16T12:40:12Z
 
