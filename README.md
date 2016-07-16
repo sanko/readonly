@@ -241,7 +241,8 @@ Darkpan.
 In short, unlike Readonly, ReadonlyX...
 
 - ...does not use slow `tie(...)` magic or eval. There shouldn't be a
-        speed penalty after making the structure immutable
+        speed penalty after making the structure immutable. See the
+        [Benchmarks](https://metacpan.org/pod/Benchmarks) section below.
 - ...does not strive to work on perl versions I can't even find a working
         build of to test against
 - ...has a single, clean API! What do all of these different forms of the
@@ -279,6 +280,28 @@ In short, unlike Readonly, ReadonlyX...
 
     Note that this is an incompatible change! If you attempt to do this and then
     switch to plain 'ol Readonly, your code will not work.
+
+# Benchmarks
+
+Don't believe Readonly is slow? Here's the benchmarks:
+
+    Hash Benchmark: timing 5000000 iterations of const, normal, readonly, readonlyx...
+         const:  3 wallclock secs ( 2.73 usr +  0.02 sys =  2.75 CPU) @ 1818181.82/s (n=5000000)
+        normal:  3 wallclock secs ( 3.02 usr + -0.02 sys =  3.00 CPU) @ 1666666.67/s (n=5000000)
+      readonly: 47 wallclock secs (40.64 usr +  0.03 sys = 40.67 CPU) @ 122931.67/s (n=5000000)
+     readonlyx:  4 wallclock secs ( 3.22 usr + -0.01 sys =  3.20 CPU) @ 1560549.31/s (n=5000000)
+    Array Benchmark: timing 5000000 iterations of const, normal, readonly, readonlyx...
+         const:  3 wallclock secs ( 2.19 usr +  0.03 sys =  2.22 CPU) @ 2253267.24/s (n=5000000)
+        normal:  1 wallclock secs ( 1.44 usr +  0.00 sys =  1.44 CPU) @ 3474635.16/s (n=5000000)
+      readonly: 36 wallclock secs (32.52 usr +  0.13 sys = 32.64 CPU) @ 153181.58/s (n=5000000)
+     readonlyx:  1 wallclock secs ( 1.12 usr + -0.02 sys =  1.11 CPU) @ 4512635.38/s (n=5000000)
+    Scalar Benchmark: timing 5000000 iterations of const, normal, readonly, readonlyx...
+         const:  1 wallclock secs ( 1.14 usr + -0.02 sys =  1.12 CPU) @ 4448398.58/s (n=5000000)
+        normal:  1 wallclock secs ( 0.99 usr +  0.02 sys =  1.00 CPU) @ 4995005.00/s (n=5000000)
+      readonly:  1 wallclock secs ( 1.25 usr +  0.00 sys =  1.25 CPU) @ 4000000.00/s (n=5000000)
+     readonlyx:  2 wallclock secs ( 1.20 usr +  0.00 sys =  1.20 CPU) @ 4156275.98/s (n=5000000)
+
+Find the script to run them yourself in `eg/benchmark.pl`.
 
 # Requirements
 
