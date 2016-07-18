@@ -2,7 +2,7 @@ package ReadonlyX;
 use 5.008;
 use strict;
 use warnings;
-our $VERSION = "1.03";
+our $VERSION = "1.04";
 BEGIN { *ReadonlyX:: = *Readonly:: }
 package          # hide from PAUSE
     Readonly;    # I wish...
@@ -12,6 +12,7 @@ use vars qw/@ISA @EXPORT @EXPORT_OK/;
 push @ISA,       'Exporter';
 push @EXPORT,    qw/Readonly/;
 push @EXPORT_OK, qw/Scalar Array Hash/;
+our $VERSION = "1.04"; # Fake
 #
 sub Array(\@;@);
 sub Hash(\%;@);
