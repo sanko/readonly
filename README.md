@@ -49,6 +49,9 @@ Readonly - Facility for creating read-only scalars, arrays, hashes
     Readonly    \%has => (key => value, key => value, ...);
     Readonly \my %has => (key => value, key => value, ...);
 
+    # Some Perl style guides (Perl::Critic, PBP) recommend uppercase
+    Readonly my $PI => 4 * atan2 1, 1;
+
 # Description
 
 This is a facility for creating non-modifiable variables. This is useful for
