@@ -78,6 +78,6 @@ my $code = {const     => \&const,
 };
 unless ($Readonly::XSokay) {
     print "Readonly::XS module not found; skipping that test.\n";
-    delete $code->{roxs};
+    delete $code->{rotie};
 }
 timethese(2_000_000, $code);
