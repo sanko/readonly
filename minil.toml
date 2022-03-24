@@ -1,7 +1,8 @@
 name = "Readonly"
-badges = ["travis"]
-module_maker="ModuleBuildTiny"
-license="artistic_2"
+badges = ["github-actions/linux.yaml", "github-actions/windows.yaml", "github-actions/osx.yaml", "github-actions/freebsd.yaml", "metacpan"]module_maker="ModuleBuildTiny"
+authority = "cpan:SANKO"
+static_install = "auto"
+license = "artistic_2"
 
 [release]
 pause_config = "C:/Strawberry/pause.upload"

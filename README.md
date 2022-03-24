@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/sanko/readonly.svg?branch=master)](https://travis-ci.org/sanko/readonly)
+[![Actions Status](https://github.com/sanko/readonly/actions/workflows/linux.yaml/badge.svg)](https://github.com/sanko/readonly/actions/workflows/linux.yaml) [![Actions Status](https://github.com/sanko/readonly/actions/workflows/windows.yaml/badge.svg)](https://github.com/sanko/readonly/actions/workflows/windows.yaml) [![Actions Status](https://github.com/sanko/readonly/actions/workflows/osx.yaml/badge.svg)](https://github.com/sanko/readonly/actions/workflows/osx.yaml) [![Actions Status](https://github.com/sanko/readonly/actions/workflows/freebsd.yaml/badge.svg)](https://github.com/sanko/readonly/actions/workflows/freebsd.yaml) [![MetaCPAN Release](https://badge.fury.io/pl/Readonly.svg)](https://metacpan.org/release/Readonly)
 # NAME
 
 Readonly - Facility for creating read-only scalars, arrays, hashes
@@ -396,7 +396,7 @@ Please note that most users of Readonly no longer need to install the
 companion module Readonly::XS which is recommended but not required for perl
 5.6.x and under. Please do not force it as a requirement in new code and do
 not use the package variable `$Readonly::XSokay` in code/tests. For more, see
-["Internals" in the section on Readonly's new internals](https://metacpan.org/pod/the&#x20;section&#x20;on&#x20;Readonly&#x27;s&#x20;new&#x20;internals#Internals).
+["Internals" in the section on Readonly's new internals](https://metacpan.org/pod/the%20section%20on%20Readonly%27s%20new%20internals#Internals).
 
 There are no non-core requirements.
 
@@ -419,7 +419,7 @@ function work a lot smoother under perl 5.8+.
 
 # Author
 
-Sanko Robinson &lt;sanko@cpan.org> - http://sankorobinson.com/
+Sanko Robinson <sanko@cpan.org> - http://sankorobinson.com/
 
 CPAN ID: SANKO
 
@@ -427,7 +427,7 @@ Original author: Eric J. Roode, roode@cpan.org
 
 # License and Legal
 
-Copyright (C) 2013-2016 by Sanko Robinson &lt;sanko@cpan.org>
+Copyright (C) 2013-2016 by Sanko Robinson <sanko@cpan.org>
 
 Copyright (c) 2001-2004 by Eric J. Roode. All Rights Reserved.
 

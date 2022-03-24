@@ -1,0 +1,54 @@
+name: Windows
+
+on:
+    push:
+        branches: '*'
+    pull_request:
+        branches: '*'
+
+jobs:
+  perl-job:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [windows-latest]
+        perl: [ '5.30', '5.32', 'latest' ]
+        dist: [ 'strawberry' ]
+
+    runs-on: ${{matrix.runner}}
+    name: OS ${{matrix.runner}} Perl ${{matrix.perl}} ${{matrix.dist}}
+
+    #container:
+    #  image: perl:${{ matrix.perl-version }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up perl ${{ matrix.dist }} ${{ matrix.perl }}
+      uses: shogo82148/actions-setup-perl@v1.11.0
+      with:
+          perl-version: ${{ matrix.perl }}
+          distribution: ${{ matrix.dist }}
+
+    - name: perl -V
+      run: perl -V
+
+    - name: Install dependencies
+      run: |
+          cpanm --installdeps -v -n --mirror http://cpan.cpantesters.org/ .
+
+    - name: Regular Tests
+      run: |
+          cpanm -v --test-only .
+
+    - name: Show content of log files on Linux
+      if: ${{ failure() && startsWith( matrix.runner, 'ubuntu-' )  }}
+      run: cat /home/runner/.cpanm/work/*/build.log
+
+    - name: Show content of log files on Mac
+      if: ${{ failure() && startsWith( matrix.runner, 'macos-' )  }}
+      run: cat /Users/runner/.cpanm/work/*/build.log
+
+    - name: Show content of log files on Windows
+      if: ${{ failure() && startsWith( matrix.runner, 'windows-' )  }}
+      run: cat C:\Users\RUNNER~1\.cpanm\work\*\build.log

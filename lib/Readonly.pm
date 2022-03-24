@@ -912,4 +912,10 @@ Copyright (c) 2001-2004 by Eric J. Roode. All Rights Reserved.
 This module is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
 
+=begin stopwords
+
+readonly recurse scalarize nonmodifiable typeglob tglob -ing const-related const
+
+=end stopwords
+
 =cut
