@@ -43,8 +43,8 @@ sub Scalar($;$) {
     my $var = $#_ == 0 && defined $_[0] ? $_[0] : $_[1];
     my $ref = ref $var;
     $ref eq 'ARRAY' ? $_[0] = $var : $ref eq 'HASH' ? $_[0]
-        = $var : $ref eq 'SCALAR'
-        or $ref eq '' ? $_[0] = $var : $ref eq 'REF' ? $_[0] = \$_[1] : 1;
+        = $var : $ref eq 'SCALAR' || $ref eq 'Regexp'
+        || $ref eq '' ? $_[0] = $var : $ref eq 'REF' ? $_[0] = \$_[1] : 1;
     _readonly($_[0]);
     Internals::SvREADONLY($_[0], 1);
 }
@@ -52,7 +52,7 @@ sub Scalar($;$) {
 sub Readonly(\[%@$]$) {
     my $type = ref $_[0];
     return Scalar(${$_[0]}, defined $_[1] ? $_[1] : ())
-        if $type eq 'SCALAR' or $type eq '';
+        if $type eq 'SCALAR' or $type eq '' or $type eq 'Regexp';
     return Hash(%{$_[0]}, defined $_[1] ? $_[1] : ()) if $type eq 'HASH';
     return Array(@{$_[0]}, defined $_[1] ? $_[1] : []) if $type eq 'ARRAY';
 }
@@ -60,7 +60,7 @@ sub Readonly(\[%@$]$) {
 sub _readonly {
     my $type = ref $_[0];
     my ($onoff) = $#_ ? $_[1] : 1;
-    if ($type eq '') {
+    if ($type eq '' or $type eq 'Regexp') {
         return Internals::SvREADONLY($_[0], $onoff);
     }
     elsif ($type eq 'SCALAR') {
@@ -97,7 +97,7 @@ sub Clone(\[$@%]) {
     my $retval = Storable::dclone($_[0]);
     $retval = $$retval if ref $retval eq 'REF';
     my $type = ref $retval;
-    _readonly((  $type eq 'SCALAR' || $type eq '' ? $$retval
+    _readonly((  $type eq 'SCALAR' or $type eq '' or $type eq 'Regexp' ? $$retval
                : $type eq 'HASH'  ? $retval
                : $type eq 'ARRAY' ? @$retval
                :                    $retval

@@ -11,6 +11,7 @@ use ReadonlyX;
     Readonly::Hash my %hash => (foo => 'bar');
     Readonly::Array my @deep_array => (1, \@array);
     Readonly::Hash my %deep_hash => (foo => \@array);
+    Readonly::Scalar my $regexp => qr/regexp/;
     #
     my $scalar_clone = Readonly::Clone $scalar;
     $scalar_clone++;
@@ -31,6 +32,10 @@ use ReadonlyX;
     my %deep_hash_clone = Readonly::Clone %deep_hash;
     $deep_hash_clone{foo}->[1] = 4;
     is $deep_hash_clone{foo}->[1], 4, 'deep hash clone is mutable';
+    #
+    my $regexp_clone = Readonly::Clone $regexp;
+    $regexp_clone = qr/match/;
+    is $regexp_clone, qr/match/, 'regexp clone is mutable';
     # }
 {
     Readonly::Scalar my $scalar => ['string'];
