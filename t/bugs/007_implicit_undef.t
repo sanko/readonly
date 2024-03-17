@@ -15,7 +15,7 @@ SKIP: {
     is $@ => '', 'Simple API allows for implicit undef values';
 }
 eval q'Readonly::Scalar my $scalar;';
-like $@ => qr[Not enough arguments for Readonly::Scalar],
+like $@ => qr[Not enough arguments for .*?Readonly::Scalar],
     'Readonly::Scalar does not allow implicit undef values';
 #
 done_testing;

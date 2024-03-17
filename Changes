@@ -1,6 +1,8 @@
 Revision history for Perl extension Readonly.
 
 {{$NEXT}}
+    - Workaround argument count message change around perl 5.26 (according  to failing CPAN Tester
+      reports such as https://www.cpantesters.org/cpan/report/846799aa-9e78-11e9-8bc6-d738850d707a)
 
 2.05 2016-06-10T17:03:28Z
     - Fix deref when using the stupid and utterly unnecessary Readonly::Clone
