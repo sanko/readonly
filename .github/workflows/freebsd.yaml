@@ -1,29 +1,48 @@
-name: FreeBSD
+name: BSD
 
-on:
-    push:
-        branches: '*'
-    pull_request:
-        branches: '*'
+on: [push]
 
 jobs:
-  perl-job:
-    runs-on: macos-10.15
-    name: FreeBSD Perl ${{matrix.perl}}
+  test:
+    runs-on: ubuntu-latest
+    name: ${{ matrix.os.name }}
     strategy:
       fail-fast: false
       matrix:
-        perl: [ '5.32' ]
+        os:
+          - name: freebsd
+            architecture: x86-64
+            version: '14.0'
+            pkg: sudo pkg install -y perl5
+
+          - name: netbsd
+            architecture: x86-64
+            version: '9.3'
+            # https://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/lang/perl5/index.html
+            pkg: sudo pkgin -y install perl-5.38.2
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Test in FreeBSD
-      id: test
-      uses: vmactions/freebsd-vm@v1
-      with:
-        usesh: true
-        prepare: pkg install -y lang/perl${{matrix.perl}} p5-App-cpanminus
-        run: |
-          freebsd-version
-          perl -V
-          cpanm --installdeps -v -n --mirror http://cpan.cpantesters.org/ .
-          cpanm -v --test-only .
+      - uses: actions/checkout@v4
+      - name: Test on ${{ matrix.os.name }}
+        uses: cross-platform-actions/action@v0.23.0
+        env:
+          MY_ENV1: MY_ENV1
+          MY_ENV2: MY_ENV2
+        with:
+          environment_variables: MY_ENV1 MY_ENV2
+          operating_system: ${{ matrix.os.name }}
+          architecture: ${{ matrix.os.architecture }}
+          version: ${{ matrix.os.version }}
+          shell: bash
+          memory: 5G
+          cpu_count: 4
+          run: |
+            uname -a
+            echo $SHELL
+            pwd
+            ls -lah
+            whoami
+            env | sort
+            ${{ matrix.os.pkg }} p5-App-cpanminus
+            perl -V
+            cpanm -v --mirror http://cpan.cpantesters.org/ .
