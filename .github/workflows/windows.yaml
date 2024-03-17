@@ -12,8 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         runner: [windows-latest]
-        perl: [ '5.30', '5.32', 'latest' ]
-        dist: [ 'strawberry' ]
+        perl: [ '5.20', '5.26', '5.30', '5.32', 'latest' ]
+        dist: [ 'default', 'strawberry' ]
 
     runs-on: ${{matrix.runner}}
     name: OS ${{matrix.runner}} Perl ${{matrix.perl}} ${{matrix.dist}}
@@ -25,7 +25,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Set up perl ${{ matrix.dist }} ${{ matrix.perl }}
-      uses: shogo82148/actions-setup-perl@v1.11.0
+      uses: shogo82148/actions-setup-perl@v1
       with:
           perl-version: ${{ matrix.perl }}
           distribution: ${{ matrix.dist }}
