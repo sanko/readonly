@@ -15,7 +15,7 @@ jobs:
       matrix:
         perl: [ '5.32' ]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Test in FreeBSD
       id: test
       uses: vmactions/freebsd-vm@v0.1.5
